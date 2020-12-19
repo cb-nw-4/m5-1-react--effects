@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import Item from "./Items"
@@ -12,12 +12,23 @@ const items = [
 
 const Game = () => {
   // TODO: Replace this with React state!
-  const numCookies = 100;
-  const purchasedItems = {
+  const [numCookies, setNumCookies]=useState(100);
+  const [purchasedItems, setPurchasedItems]= useState({
     cursor: 0,
     grandma: 0,
     farm: 0,
-  };
+  });
+
+  const handleClick=(ev)=>{
+    let id=ev.target.id;
+    const updateItems={
+      ...purchasedItems,
+      [id]:purchasedItems[id]+1
+    }
+    setPurchasedItems(updateItems);
+    console.log(purchasedItems);
+}
+  
 
   return (
     <Wrapper>
@@ -27,7 +38,9 @@ const Game = () => {
           {/* TODO: Calcuate the cookies per second and show it here: */}
           <strong>0</strong> cookies per second
         </Indicator>
-        <Button>
+        <Button
+          onClick={()=>setNumCookies(numCookies+1)}
+        >
           <Cookie src={cookieSrc} />
         </Button>
       </GameArea>
@@ -35,7 +48,10 @@ const Game = () => {
       <ItemArea>
         <SectionTitle>Items:</SectionTitle>
         {/* TODO: Add <Item> instances here, 1 for each item type. */}
-        <Item items={items} purchasedItems={purchasedItems}/>
+        <Item 
+        items={items} 
+        purchasedItems={purchasedItems} 
+        handleClick={handleClick}/>
       </ItemArea>
       <HomeLink to="/">Return home</HomeLink>
     </Wrapper>
@@ -55,6 +71,9 @@ const Button = styled.button`
   border: none;
   background: transparent;
   cursor: pointer;
+  &:click{
+    transition: transform 0.25s ease;
+  }
 `;
 
 const Cookie = styled.img`

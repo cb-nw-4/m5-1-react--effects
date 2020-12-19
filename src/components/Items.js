@@ -4,16 +4,22 @@ import styled from "styled-components";
 import GlobalStyles from "./GlobalStyles";
 
 
-const Item=({items, purchasedItems})=>{
-    console.log(items);
+const Item=({items, purchasedItems, handleClick})=>{
+
+    
     return (
         <>
             {items.map(el=>{
                 return (
                     <Wrapper>
-                        <Items>
-                            <Name>{el.name}</Name>
-                            <Description>Cost: {el.cost} cookie(s). Produces {el.value} cookies/second</Description>
+                        <Items 
+                        onClick={handleClick}
+                        id={el.id}
+                        >
+                            <Name id={el.id}>{el.name}</Name>
+                            <Description id={el.id}>
+                                Cost: {el.cost} cookie(s). Produces {el.value} cookies/second
+                            </Description>
                         </Items>
                         <Purchased>
                             {purchasedItems[el.id]}
@@ -32,15 +38,20 @@ const Wrapper = styled.div`
 `;
 const Name=styled.p`
     font-size:1.5em;
+    color: white;
 `;
 
 const Description=styled.p`
     font-size:0.8em;
     color:gray;
 `;
-const Items=styled.div`
+const Items=styled.button`
     width:300px;
     padding:10px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    text-align:left;
 `;
 
 const Purchased=styled.div`
