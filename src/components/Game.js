@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
@@ -14,14 +14,23 @@ const items = [
 
 const Game = () => {
   // TODO: Replace this with React state!
-  const numCookies = 100;
-  const purchasedItems = {
+  const [numCookies, setNumCookies] = useState(100);
+  const initialState = {
     cursor: 0,
     grandma: 0,
     farm: 0,
   };
-  const handleClick = () =>{
-    console.log("click")
+  const [purchasedItems, setPurchasedItems] = useState(initialState);
+
+
+  const handleClick = (item) =>{
+    if(numCookies-item.cost > 0){
+      setNumCookies(numCookies - item.cost);
+      setPurchasedItems({...purchasedItems, [item.id]: purchasedItems[item.id]+1})
+    }    
+
+    console.log({...purchasedItems, [item.id]: +1})
+
   }
 
   return (
@@ -45,7 +54,7 @@ const Game = () => {
                 cost={item.cost} 
                 value={item.value}
                 numOwned ={purchasedItems[item.id]}
-                handleClick = {handleClick}/>
+                handleClick = {()=> handleClick(item)}/>
         ))}
       
       
