@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import Item from './Item';
@@ -13,16 +13,28 @@ const items = [
 
 const Game = () => {
   // TODO: Replace this with React state!
-  const numCookies = 100;
-  const purchasedItems = {
+  const [numCookies, setNumCookies] = useState(100);
+  const [purchasedItems, setPurchasedItems] = useState({
     cursor: 0,
     grandma: 0,
     farm: 0,
-  };
+  });
+  //const numCookies = 100;
+  // const purchasedItems = {
+  //   cursor: 0,
+  //   grandma: 0,
+  //   farm: 0,
+  // };
 
-  const handleClick = (ev)=>{
-    console.log(ev.currentTarget);
-  }
+  const handleClick = (ev, id, cost)=>{
+    ev.preventDefault();
+    if (numCookies < cost){
+      window.alert("You need more cookies!");
+      return;
+    }
+    setNumCookies(numCookies - cost);
+    setPurchasedItems({...purchasedItems, [id]: purchasedItems[id] + 1});  
+  };
 
   return (
     <Wrapper>
@@ -32,7 +44,7 @@ const Game = () => {
           {/* TODO: Calcuate the cookies per second and show it here: */}
           <strong>0</strong> cookies per second
         </Indicator>
-        <Button>
+        <Button onClick={()=>(setNumCookies(numCookies + 1))}>
           <Cookie src={cookieSrc} />
         </Button>
       </GameArea>
@@ -41,10 +53,11 @@ const Game = () => {
         <SectionTitle>Items:</SectionTitle>
         {items.map((item)=>(<Item
                               key={item.id}
+                              id={item.id}
                               name={item.name}
                               cost={item.cost}
                               value={item.value}
-                              numOwned={purchasedItems[item.name.toLowerCase()]}
+                              numOwned={purchasedItems[item.id]}
                               handleClick={handleClick}/>))/* TODO: Add <Item> instances here, 1 for each item type. */}
       </ItemArea>
       <HomeLink to="/">Return home</HomeLink>

@@ -2,9 +2,9 @@ import React from 'react';
 import styled from 'styled-components';
 
 
-const Item = ({ name, cost, value, numOwned, handleClick })=>{  
+const Item = ({ id, name, cost, value, numOwned, handleClick })=>{  
     return(
-        <Link href='#null' onClick={(ev)=> handleClick(ev)} value={name}>
+        <Link href="#" onClick={(ev)=> handleClick(ev, id, cost)} >
             <div>
                 <h1>{name}</h1>
                 <Text>{`Cost: ${cost} cookie(s). Produces ${value} cookies/second.`}</Text>        
