@@ -57,6 +57,21 @@ const Game = () => {
     }
   }, [numCookies])
 
+  useEffect(() => {
+    const handleKeydown = (ev) => {
+      ev.preventDefault()
+      if (ev.code === 'Space') {
+        handleIncrement();
+      }
+    }
+
+    window.addEventListener('keydown', handleKeydown);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeydown);
+    }
+  })
+
   return (
     <Wrapper>
       <GameArea>
@@ -78,6 +93,7 @@ const Game = () => {
               type={item}
               numOwned={purchasedItems}
               handleClick={handleClick}
+              key={item.id}
             />
           );
         })}
