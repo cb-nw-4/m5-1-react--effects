@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import Item from './Item';
@@ -27,17 +27,6 @@ const Game = () => {
     }, 0);
     return cookiesperTick;
   };  
-  
-  useEffect(()=>{
-    document.title = `${numCookies} cookies - Cookie Clicker Workshop`;
-
-    return () =>{document.title = 'Cookie Clicker Workshop'}   
-  }, [numCookies]);
-
-  useInterval(() => {
-    const numOfGeneratedCookies = calculateCookiesPerTick(purchasedItems);  
-    setNumCookies(numCookies + numOfGeneratedCookies); 
-  }, 1000);
 
   const handleClick = (ev, id, cost)=>{
     ev.preventDefault();
@@ -45,9 +34,35 @@ const Game = () => {
       window.alert("You need more cookies!");
       return;
     }
-    setNumCookies(numCookies - cost);
+    setNumCookies(prevNumCookies => prevNumCookies - cost);
     setPurchasedItems({...purchasedItems, [id]: purchasedItems[id] + 1});  
   };
+ 
+  const handleKeydown = useCallback((ev) => {  
+    if (ev.code === "Space") {     
+      setNumCookies(prevNumCookies => prevNumCookies + 1);
+    }
+  }, []);
+  
+  useEffect(()=>{
+    document.title = `${numCookies} cookies - Cookie Clicker Workshop`;
+
+    return () =>{document.title = 'Cookie Clicker Workshop'}   
+  }, [numCookies]);
+
+
+  useEffect(()=>{   
+    window.addEventListener("keydown", handleKeydown);
+
+    return () =>{window.removeEventListener("keydown", handleKeydown)}   
+  }, [handleKeydown]);
+
+  useInterval(() => {
+    const numOfGeneratedCookies = calculateCookiesPerTick(purchasedItems);  
+    setNumCookies(prevNumCookies => prevNumCookies + numOfGeneratedCookies); 
+  }, 1000);
+
+  
 
   return (
     <Wrapper>
@@ -57,7 +72,7 @@ const Game = () => {
           {/* TODO: Calcuate the cookies per second and show it here: */}
           <strong>{calculateCookiesPerTick(purchasedItems)}</strong> cookies per second
         </Indicator>
-        <Button onClick={()=>(setNumCookies(numCookies + 1))}>
+        <Button onClick={()=>(setNumCookies(prevNumCookies => prevNumCookies + 1))}>
           <Cookie src={cookieSrc} />
         </Button>
       </GameArea>
