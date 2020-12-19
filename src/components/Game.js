@@ -19,13 +19,31 @@ const Game = () => {
     grandma: 0,
     farm: 0,})
   
-  useEffect(() => {
-    document.title = numCookies + ' cookies - Cookie Clicker'
-  }, [numCookies])
-  
-  const calculateCookiesPerTick = () => {
-    const cursor = purchased.cursor * items[0].value
-    const grandma = purchased.grandma * items[1].value
+  const onKeyDown = (ev) => {
+    if (ev.code === 'Space') { 
+      handleCookieClick()
+    }
+  }
+    
+    useEffect(() => {
+      document.title = numCookies + ' cookies - Cookie Clicker'
+    }, [numCookies])
+    
+    useEffect(() => {
+      window.addEventListener('keydown', onKeyDown)
+      return () => {
+        window.removeEventListener('keydown', onKeyDown)
+      }
+    }, [onKeyDown])
+    
+    const handleCookieClick = () => {
+      setNumCookies(numCookies + 1)
+    }
+
+
+    const calculateCookiesPerTick = () => {
+      const cursor = purchased.cursor * items[0].value
+      const grandma = purchased.grandma * items[1].value
     const farm = purchased.farm * items[2].value
     const totalValue = cursor + grandma + farm
     return totalValue    
@@ -46,9 +64,7 @@ const Game = () => {
     }
   }
 
-  const handleCookieClick = () => {
-    setNumCookies(numCookies + 1)
-  }
+
 
 
   return (
