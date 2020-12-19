@@ -14,6 +14,8 @@ const items = [
 ];
 
 const Game = () => {
+
+  
   // TODO: Replace this with React state!
   const [numCookies, setNumCookies] = useState(100);
   const initialState = {
@@ -21,16 +23,26 @@ const Game = () => {
     grandma: 0,
     farm: 0,
   };
+  
   const [purchasedItems, setPurchasedItems] = useState(initialState);
+  
+  
+  React.useEffect(() => {
+    document.title = `${numCookies} cookies - Cookie Clicker Workshop`
+  
+    return () => {
+      document.title = `Cookie Clicker Workshop`
+    }
+  }, [numCookies])
 
 
   const handleClick = (item) =>{
+    
     if(numCookies-item.cost > 0){
       setNumCookies(numCookies - item.cost);
       setPurchasedItems({...purchasedItems, [item.id]: purchasedItems[item.id]+1})
     }    
-
-    console.log({...purchasedItems, [item.id]: +1})
+    //console.log({...purchasedItems, [item.id]: +1})
 
   }
 
@@ -40,15 +52,12 @@ const Game = () => {
     items.map(item => 
       total += ObjItems[item.id] * item.value)
 
-    console.log('total', total);
     return total;
 
   }
 
-
   useInterval(() => {
     const numOfGeneratedCookies = calculateCookiesPerTick(purchasedItems);
-  
     // Add this number of cookies to the total
     setNumCookies(numCookies + numOfGeneratedCookies);
 
@@ -77,7 +86,6 @@ const Game = () => {
                 numOwned ={purchasedItems[item.id]}
                 handleClick = {()=> handleClick(item)}/>
         ))}
-      
       
       </ItemArea>
       <HomeLink to="/">Return home</HomeLink>

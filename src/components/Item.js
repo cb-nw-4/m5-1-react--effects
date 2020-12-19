@@ -35,8 +35,6 @@ const Button = styled.button`
         align-self: center;
     }
 `
-
-
 const Div = styled.div`
 
     align-self: flex-start;
@@ -49,7 +47,5 @@ const Div = styled.div`
     & p{
         color: grey;
     }
-
-
 `
 export default Item;
