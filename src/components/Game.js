@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import Item from './Item';
@@ -26,14 +26,17 @@ const Game = () => {
       return a + b.value * purchasedItems[b.id];
     }, 0);
     return cookiesperTick;
-  };
+  };  
+  
+  useEffect(()=>{
+    document.title = `${numCookies} cookies - Cookie Clicker Workshop`;
+
+    return () =>{document.title = 'Cookie Clicker Workshop'}   
+  }, [numCookies]);
 
   useInterval(() => {
-    const numOfGeneratedCookies = calculateCookiesPerTick(purchasedItems);
-  
-    setNumCookies(numCookies + numOfGeneratedCookies);
-  
-    // Add this number of cookies to the total
+    const numOfGeneratedCookies = calculateCookiesPerTick(purchasedItems);  
+    setNumCookies(numCookies + numOfGeneratedCookies); 
   }, 1000);
 
   const handleClick = (ev, id, cost)=>{
