@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
 import cookieSrc from "../cookie.svg";
+
+import Item from './Item';
 
 const items = [
   { id: "cursor", name: "Cursor", cost: 10, value: 1 },
@@ -11,13 +13,29 @@ const items = [
 ];
 
 const Game = () => {
-  // TODO: Replace this with React state!
-  const numCookies = 100;
-  const purchasedItems = {
+  const [numCookies, setNumCookies] = useState(100);
+  const [purchasedItems, setPurchasedItems] = useState({
     cursor: 0,
     grandma: 0,
     farm: 0,
-  };
+  });
+
+  const handleIncrement = () => {
+    setNumCookies(numCookies + 1);
+  }
+
+  const handleClick = (type) => {
+    if (numCookies >= type.cost) {
+      setNumCookies(numCookies - type.cost);
+      setPurchasedItems({
+        ...purchasedItems,
+        [type.id]: purchasedItems[type.id] + 1
+      })
+    }
+    else {
+      window.alert("You don't have enough cookies to purchase this item!");
+    }
+  }
 
   return (
     <Wrapper>
@@ -27,18 +45,27 @@ const Game = () => {
           {/* TODO: Calcuate the cookies per second and show it here: */}
           <strong>0</strong> cookies per second
         </Indicator>
-        <Button>
+        <Button onClick={handleIncrement}>
           <Cookie src={cookieSrc} />
         </Button>
       </GameArea>
 
       <ItemArea>
         <SectionTitle>Items:</SectionTitle>
-        {/* TODO: Add <Item> instances here, 1 for each item type. */}
+        <>{items.map((item) => {
+          return (
+            <Item 
+              type={item}
+              numOwned={purchasedItems}
+              handleClick={handleClick}
+            />
+          );
+        })}
+        </>
       </ItemArea>
       <HomeLink to="/">Return home</HomeLink>
     </Wrapper>
-  );
+  )
 };
 
 const Wrapper = styled.div`
