@@ -18,19 +18,22 @@ const Game = () => {
   const [purchased, setPurchased] = useState({cursor: 0,
     grandma: 0,
     farm: 0,})
-
-    const calculateCookiesPerTick = () => {
-      const cursor = purchased.cursor * items[0].value
-      const grandma = purchased.grandma * items[1].value
-      const farm = purchased.farm * items[2].value
   
-      const totalValue = cursor + grandma + farm
-      return totalValue    
+  useEffect(() => {
+    document.title = numCookies + ' cookies - Cookie Clicker'
+  }, [numCookies])
+  
+  const calculateCookiesPerTick = () => {
+    const cursor = purchased.cursor * items[0].value
+    const grandma = purchased.grandma * items[1].value
+    const farm = purchased.farm * items[2].value
+    const totalValue = cursor + grandma + farm
+    return totalValue    
     }
   
-    useInterval(() => {
-      const cookieResult = calculateCookiesPerTick()
-      setNumCookies(numCookies + cookieResult)
+  useInterval(() => {
+    const cookieResult = calculateCookiesPerTick()
+     setNumCookies(numCookies + cookieResult)
     }, 1000)
 
   const handleClick = (item) => {
