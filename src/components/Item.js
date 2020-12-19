@@ -1,12 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-const itemExample = [
-    { id: "cursor", name: "Cursor", cost: 10, value: 1 }
-];
-
 const Item = ({ name, cost, value, numOwned, handleClick }) => {
-    console.log(numOwned);
     return (
     <Button onClick={handleClick}>
         <div>

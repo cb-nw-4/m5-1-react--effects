@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import Item from './Item';
@@ -12,34 +12,55 @@ const items = [
 ];
 
 const Game = () => {
-  const handleClick = () => {
-    console.log('Clicked')
-  }
-  // TODO: Replace this with React state!
-  const numCookies = 100;
-  const purchasedItems = {
+  //numCookies STATE
+  const [numCookies, setNumCookies] = useState(10000);
+  const incrementCount = () => {
+    setNumCookies(numCookies + 1);
+  };
+  //purchasedItems COUNT
+  const initialValues = { 
     cursor: 0,
     grandma: 0,
     farm: 0,
+  };
+  const [purchasedItems, setPurchasedItems] = useState(initialValues);
+
+  const handleClick = (item) => {
+    let itemId = item.id
+    // console.log(itemId);
+    // console.log(purchasedItems[itemId],'ITEMS');
+    // console.log(purchasedItems.itemId)
+    if(numCookies >= item.cost){
+      setNumCookies(numCookies - item.cost);
+      setPurchasedItems({...purchasedItems, [itemId]:purchasedItems[itemId] + 1});
+    } else {
+      window.alert('Not enough cookies');
+    }
   };
 
   return (
     <Wrapper>
       <GameArea>
-        <Indicator>
+        <Indicator numCookies={numCookies}>
           <Total>{numCookies} cookies</Total>
           {/* TODO: Calcuate the cookies per second and show it here: */}
           <strong>0</strong> cookies per second
         </Indicator>
         <Button>
-          <Cookie src={cookieSrc} />
+          <Cookie src={cookieSrc} onClick={incrementCount}/>
         </Button>
       </GameArea>
 
       <ItemArea>
         <SectionTitle>Items:</SectionTitle>
         {items.map((item) => {
-          return <Item name={item.name} cost={item.cost} value={item.value} numOwned={purchasedItems[item.id]} handleClick={handleClick}/>
+          return <Item 
+          name={item.name}
+          cost={item.cost}
+          value={item.value} 
+          numOwned={purchasedItems[item.id]} 
+          handleClick={() => {handleClick(item)}}
+          />
         })}
       </ItemArea>
       <HomeLink to="/">Return home</HomeLink>
