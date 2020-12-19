@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import Item from './Item'
@@ -13,14 +13,23 @@ const items = [
 
 const Game = () => {
   // TODO: Replace this with React state!
-  const numCookies = 100;
-  const purchasedItems = {
-    cursor: 0,
+  const [numCookies, setNumCookies] = useState(0)
+  const [purchased, setPurchased] = useState({cursor: 0,
     grandma: 0,
-    farm: 0,
-  };
-  const handleClick = () => {
-    console.log()
+    farm: 0,})
+
+  const handleClick = (item) => {
+    console.log(item)
+    if (numCookies < item.cost) {
+      window.alert('you broke')
+    } else {
+      setPurchased({...purchased, [item.id]: purchased[item.id] + 1  })
+      setNumCookies(numCookies - item.cost)
+    }
+  }
+
+  const handleCookieClick = () => {
+    setNumCookies(numCookies + 1)
   }
 
   return (
@@ -31,14 +40,14 @@ const Game = () => {
           {/* TODO: Calcuate the cookies per second and show it here: */}
           <strong>0</strong> cookies per second
         </Indicator>
-        <Button>
+        <Button onClick={handleCookieClick}>
           <Cookie src={cookieSrc} />
         </Button>
       </GameArea>
 
       <ItemArea>
         <SectionTitle>Items:</SectionTitle>
-        <Item items={items} numOwned={purchasedItems} handleClick={handleClick}></Item>
+        <Item items={items} numOwned={purchased} handleClick={handleClick}></Item>
       </ItemArea>
       <HomeLink to="/">Return home</HomeLink>
     </Wrapper>
