@@ -12,17 +12,24 @@ const items = [
 ];
 
 const Game = () => {
-  // console.log(items)
-  // TODO: Replace this with React state!
-  const numCookies = 100;
-  const purchasedItems = {
-    cursor: 0,
-    grandma: 0,
-    farm: 0,
-  };
+  const [numCookies, setNumCookies] = useState(100)
+  const [purchasedItems, setPurchasedItems] = useState({cursor: 0, grandma: 0,farm: 0,})
 
-  const handleClick = () => {
-    console.log("Test")
+  // const purchasedItems = {
+  //   cursor: 0,
+  //   grandma: 0,
+  //   farm: 0,
+  // };
+
+  const handleClick = (selectedItem) => {
+    if (numCookies < selectedItem.cost) {
+      window.alert("You can't afford this!")
+    } else {
+      setNumCookies(numCookies - selectedItem.cost);
+      let currentPurchasedItems = purchasedItems;
+      currentPurchasedItems[selectedItem.id] += 1;
+      setPurchasedItems(currentPurchasedItems);
+    }
   };
 
   // let count = purchasedItems.value;
@@ -35,16 +42,16 @@ const Game = () => {
           {/* TODO: Calcuate the cookies per second and show it here: */}
           <strong>0</strong> cookies per second
         </Indicator>
-        <Button onClick={handleClick}>
+        <Button onClick={() => setNumCookies(numCookies + 1)}>
+        {/* <Button onClick={() => handleClick()}> */}
           <Cookie src={cookieSrc} />
         </Button>
       </GameArea>
 
       <ItemArea>
         <SectionTitle>Items:</SectionTitle>
-        {/* TODO: Add <Item> instances here, 1 for each item type. */}
         {items.map((item) => {
-          return <Item name={item.name} cost={item.cost} value={item.value} count={purchasedItems.cursor}>{item.name}</Item>
+          return <Button onClick={() => handleClick(item)}><Item name={item.name} cost={item.cost} value={item.value} count={purchasedItems[item.id]}>{item.name}</Item></Button>
         })}
       </ItemArea>
       <HomeLink to="/">Return home</HomeLink>
