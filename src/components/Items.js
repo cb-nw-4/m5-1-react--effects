@@ -1,12 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 
-import GlobalStyles from "./GlobalStyles";
-
 
 const Item=({items, purchasedItems, handleClick})=>{
-
-    
     return (
         <>
             {items.map(el=>{
