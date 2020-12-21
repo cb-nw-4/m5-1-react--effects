@@ -44,7 +44,6 @@ const Game = () => {
       [id]:purchasedItems[id]+1
     }
     setPurchasedItems(updateItems);
-    console.log(purchasedItems);
   }
 
   const handleKeydown=(ev)=>{
@@ -111,9 +110,10 @@ const Button = styled.button`
   border: none;
   background: transparent;
   cursor: pointer;
-  &:click{
-    transition: transform 0.25s ease;
+  &:active{
+    transform:scale(0.95);
   }
+  outline:none;
 `;
 
 const Cookie = styled.img`
