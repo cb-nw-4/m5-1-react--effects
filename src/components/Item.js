@@ -1,10 +1,20 @@
-import React from 'react'
+import React, {useRef, useEffect} from 'react'
 import  styled  from 'styled-components'
 
 const Item = ({items, numOwned, handleClick}) => {
+
+  const numRef = useRef()
+
+  useEffect(() => {
+    
+    console.log(numRef)
+  }, [])
+
+
+
   return (
-    <ItemTypeWrapper>
-      {items.map(item => {
+    <ItemTypeWrapper ref={numRef}>
+      {items.map((item, i)=> {
         return (
       <ItemContainer onClick={() => handleClick(item)}>    
         <div>

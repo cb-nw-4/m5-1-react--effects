@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useCallback} from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import Item from './Item'
@@ -18,12 +18,16 @@ const Game = () => {
   const [purchased, setPurchased] = useState({cursor: 0,
     grandma: 0,
     farm: 0,})
-  
-  const onKeyDown = (ev) => {
+
+    const handleCookieClick = useCallback(() => {
+    setNumCookies(numCookies + 1);
+  }, [numCookies]);
+    
+  const onKeyDown = useCallback((ev) => {
     if (ev.code === 'Space') { 
       handleCookieClick()
     }
-  }
+  }, [handleCookieClick])
     
     useEffect(() => {
       document.title = numCookies + ' cookies - Cookie Clicker'
@@ -36,9 +40,6 @@ const Game = () => {
       }
     }, [onKeyDown])
     
-    const handleCookieClick = () => {
-      setNumCookies(numCookies + 1)
-    }
 
 
     const calculateCookiesPerTick = () => {
