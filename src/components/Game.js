@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import Item from './Item';
 import useInterval from '../../src/hooks/use-interval.hook';
 // import useInterval from 'src/hooks/use-interval.hook';
+// import { Helmet } from 'react-helmet';
 
 import cookieSrc from "../cookie.svg";
 
@@ -65,9 +66,10 @@ const Game = () => {
     setNumCookies(numCookies + numOfGeneratedCookies);
   }, 1000);
 
-  //TEST
-  // console.log(calculateCookiesPerTick(purchasedItems));
-  //
+  //Exercise 4: Updateting the Tab Title
+  useEffect(() => {
+    document.title = `${numCookies} cookies - Cookie Clicker`;
+  }, [numCookies]);
 
   return (
     <Wrapper>
