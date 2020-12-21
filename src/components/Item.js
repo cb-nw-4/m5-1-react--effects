@@ -6,15 +6,14 @@ const Item = ({items, numOwned, handleClick}) => {
   const numRef = useRef()
 
   useEffect(() => {
-    
-    console.log(numRef)
+      numRef.current.children[0].focus()
   }, [])
 
 
 
   return (
     <ItemTypeWrapper ref={numRef}>
-      {items.map((item, i)=> {
+      {items.map((item)=> {
         return (
       <ItemContainer onClick={() => handleClick(item)}>    
         <div>
