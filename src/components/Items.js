@@ -33,16 +33,16 @@ const Wrapper = styled.div`
     border-bottom:2px solid gray;
 `;
 const Name=styled.p`
-    font-size:1.5em;
+    font-size:2em;
     color: white;
 `;
 
 const Description=styled.p`
-    font-size:0.8em;
+    font-size:1em;
     color:gray;
 `;
 const Items=styled.button`
-    width:300px;
+    width:350px;
     padding:10px;
     border: none;
     background: transparent;
@@ -51,7 +51,7 @@ const Items=styled.button`
 `;
 
 const Purchased=styled.div`
-    font-size:1.5em;
+    font-size:2em;
     padding:10px;
 `;
 

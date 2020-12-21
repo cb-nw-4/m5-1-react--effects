@@ -45,11 +45,28 @@ const Game = () => {
     }
     setPurchasedItems(updateItems);
     console.log(purchasedItems);
-}
+  }
 
-useEffect(()=>{
-  document.title=`${numCookies} - Cookie Clicker Workshop`;
-},[numCookies])
+  const handleKeydown=(ev)=>{
+    if (ev.code === "Space") {
+      setNumCookies(numCookies+1);
+      console.log(numCookies);
+    }
+  }
+
+  useEffect(()=>{
+    document.title=`${numCookies} - Cookie Clicker Workshop`;
+    return () => {
+      document.title = `Cookie Clicker Workshop`
+    }
+  },[numCookies]);
+
+  useEffect(()=>{
+    window.addEventListener('keydown', handleKeydown);
+    return ()=>{
+      window.removeEventListener('keydown', handleKeydown);
+    }
+  },[handleKeydown]);
   
 
   return (
@@ -59,6 +76,7 @@ useEffect(()=>{
           <Total>{numCookies} cookies</Total>
           {/* TODO: Calcuate the cookies per second and show it here: */}
           <strong>{cookiesPerSec}</strong> cookies per second
+          <p>Get those cookies, get those cookies</p>
         </Indicator>
         <Button
           onClick={()=>setNumCookies(numCookies+1)}
