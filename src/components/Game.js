@@ -1,6 +1,9 @@
 import React from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import { v4 as uuidv4 } from 'uuid';
+
+import Item from './Item';
 
 import cookieSrc from "../cookie.svg";
 
@@ -9,6 +12,10 @@ const items = [
   { id: "grandma", name: "Grandma", cost: 100, value: 10 },
   { id: "farm", name: "Farm", cost: 1000, value: 80 },
 ];
+
+const handleClick = (event) => {
+  console.log(event.currentTarget.id);
+}
 
 const Game = () => {
   // TODO: Replace this with React state!
@@ -34,7 +41,14 @@ const Game = () => {
 
       <ItemArea>
         <SectionTitle>Items:</SectionTitle>
-        {/* TODO: Add <Item> instances here, 1 for each item type. */}
+        {items.map(item => <Item
+          key={uuidv4()}
+          id={item.id}
+          name={item.name}
+          cost={item.cost}
+          value={item.value}
+          numOwned={purchasedItems[item.id]}
+          handleClick={handleClick} />)}
       </ItemArea>
       <HomeLink to="/">Return home</HomeLink>
     </Wrapper>
