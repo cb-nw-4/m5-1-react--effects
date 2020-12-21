@@ -1,9 +1,9 @@
 import React from "react";
 import styled from "styled-components";
 
-const Item = ({ id, name, cost, value, numOwned, handleClick }) => {
+const Item = ({ id, name, cost, value, numOwned, handleItemClick }) => {
   return (
-    <Button id={id} onClick={handleClick}>
+    <Button id={id} onClick={handleItemClick}>
       <div>
         <Name>{name}</Name>
         <Detail>Cost: {cost} cookie(s). Produces {value} cookies/second.</Detail>

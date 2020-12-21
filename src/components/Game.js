@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { v4 as uuidv4 } from 'uuid';
@@ -13,18 +13,52 @@ const items = [
   { id: "farm", name: "Farm", cost: 1000, value: 80 },
 ];
 
-const handleClick = (event) => {
-  console.log(event.currentTarget.id);
-}
-
 const Game = () => {
-  // TODO: Replace this with React state!
-  const numCookies = 100;
-  const purchasedItems = {
+  const [numCookies, setNumCookies] = useState(100);
+  const [purchasedItems, setPurchasedItems] = useState({
     cursor: 0,
     grandma: 0,
     farm: 0,
-  };
+  });
+
+  const handleItemClick = (event) => {
+    // const id = event.currentTarget.id;
+    const item = items.find(item => item.id === event.currentTarget.id);
+
+    switch (item.id) {
+      case 'cursor':
+        if (numCookies >= item.cost) {
+          setNumCookies(numCookies - item.cost);
+          setPurchasedItems({ ...purchasedItems, [item.id]: purchasedItems[item.id] + 1 });
+        } else {
+          window.alert(`You can't afford a ${item.name}`);
+        }
+
+        break;
+      case 'grandma':
+        if (numCookies >= item.cost) {
+          setNumCookies(numCookies - item.cost);
+          setPurchasedItems({ ...purchasedItems, [item.id]: purchasedItems[item.id] + 1 });
+        } else {
+          window.alert(`You can't afford a ${item.name}`);
+        }
+  
+        break;
+      case 'farm':
+        if (numCookies >= item.cost) {
+          setNumCookies(numCookies - item.cost);
+          setPurchasedItems({ ...purchasedItems, [item.id]: purchasedItems[item.id] + 1 });
+        } else {
+          window.alert(`You can't afford a ${item.name}`);
+        }
+  
+        break;
+    }
+  }
+
+  const handleCookieClick = () => {
+    setNumCookies(numCookies + 1);
+  }
 
   return (
     <Wrapper>
@@ -34,7 +68,7 @@ const Game = () => {
           {/* TODO: Calcuate the cookies per second and show it here: */}
           <strong>0</strong> cookies per second
         </Indicator>
-        <Button>
+        <Button onClick={handleCookieClick}>
           <Cookie src={cookieSrc} />
         </Button>
       </GameArea>
@@ -48,7 +82,7 @@ const Game = () => {
           cost={item.cost}
           value={item.value}
           numOwned={purchasedItems[item.id]}
-          handleClick={handleClick} />)}
+          handleItemClick={handleItemClick} />)}
       </ItemArea>
       <HomeLink to="/">Return home</HomeLink>
     </Wrapper>
