@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import Item from './Item';
@@ -13,21 +13,22 @@ const items = [
   { id: "grandma", name: "Grandma", cost: 100, value: 10 },
   { id: "farm", name: "Farm", cost: 1000, value: 80 },
 ];
+const initialValues = { 
+  cursor: 0,
+  grandma: 0,
+  farm: 0,
+};
 
 const Game = () => {
   //numCookies STATE
   const [cookiesPerSecState, setCookiesPerSecState] = useState(0);
   const [numCookies, setNumCookies] = useState(10000);
+  const [purchasedItems, setPurchasedItems] = useState(initialValues);
+
   const incrementCount = () => {
     setNumCookies(numCookies + 1);
   };
   //purchasedItems COUNT
-  const initialValues = { 
-    cursor: 0,
-    grandma: 0,
-    farm: 0,
-  };
-  const [purchasedItems, setPurchasedItems] = useState(initialValues);
 
   const handleClick = (item) => {
     let itemId = item.id
@@ -70,6 +71,41 @@ const Game = () => {
   useEffect(() => {
     document.title = `${numCookies} cookies - Cookie Clicker`;
   }, [numCookies]);
+
+  //Exercise 5: Using the "space" Key
+  const keyPressHandler = (ev) => {
+    if (ev.code === "Space") {
+      incrementCount();
+      console.log('Key Pressed');
+    }
+  }
+  useEffect(() => {
+    console.log('Key press effect')
+    // const keyPressHandler = (ev) => {
+    //   if (ev.code === "Space") {
+    //     incrementCount();
+    //     console.log('Key Pressed');
+    //   }
+    // }
+    window.addEventListener('keydown', keyPressHandler);
+
+    return () => {
+      window.removeEventListener('keydown', keyPressHandler);
+    }
+  }, [keyPressHandler]);
+
+  // const handleGetCookie = 
+  //   useCallback(() => {
+  //     setNumCookies(numCookies + 1);
+  //   },[numCookies]);
+
+  // const onKeyDown =
+  //   useCallback((ev) => {
+  //     if (ev.code === "Space") {
+  //       handleClick()
+  //     }
+  //     window.addEventListener('keypress', onKeyDown);
+  //   }, [handleGetCookie]);
 
   return (
     <Wrapper>
