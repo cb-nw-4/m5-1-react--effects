@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { v4 as uuidv4 } from 'uuid';
@@ -21,6 +21,10 @@ const Game = () => {
     grandma: 0,
     farm: 0,
   });
+
+  useEffect(() => {
+    document.title = numCookies + ' - Cookie Clicker';
+  }, [numCookies]);
 
   const handleItemClick = (event) => {
     const item = items.find(item => item.id === event.currentTarget.id);
