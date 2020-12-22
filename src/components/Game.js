@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { v4 as uuidv4 } from 'uuid';
@@ -25,6 +25,26 @@ const Game = () => {
   useEffect(() => {
     document.title = numCookies + ' - Cookie Clicker';
   }, [numCookies]);
+
+  const handleKeyDown = (event) => {
+    if (event.code === 'Space') {
+      setNumCookies(numCookies + 1);
+    }
+  }
+
+  // Prevent the default action of the spacebar registering a click event
+  // on the cookie if it has focus.
+  const handleKeyUp = (event) => {
+    event.preventDefault();
+  }
+
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    }
+  }, [handleKeyDown]);
 
   const handleItemClick = (event) => {
     const item = items.find(item => item.id === event.currentTarget.id);
@@ -88,7 +108,7 @@ const Game = () => {
           <Total>{numCookies} cookies</Total>
           <strong>{calculateCookiesPerTick(purchasedItems)}</strong> cookies per second
         </Indicator>
-        <Button onClick={handleCookieClick}>
+        <Button onClick={handleCookieClick} onKeyUp={handleKeyUp}>
           <Cookie src={cookieSrc} />
         </Button>
       </GameArea>
