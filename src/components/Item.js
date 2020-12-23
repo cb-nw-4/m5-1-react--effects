@@ -1,11 +1,24 @@
-import React from 'react';
+import React, {useRef, useEffect} from 'react';
 import styled from 'styled-components';
 
 
-const Item = ({id, name, cost, value, numOwned, handleClick}) => {
+const Item = ({id, name, cost, value, numOwned, handleClick, focusOnMount}) => {
+
+    const firstItemRef = useRef(null);
+
+
+    useEffect(() => {
+        if(focusOnMount){
+            firstItemRef.current.focus()
+        }
+    }, []);
+    
+
+
+
     return (
 
-        <Button onClick= {handleClick}>
+        <Button onClick= {handleClick} ref={firstItemRef} >
             <Div>
                 <h3>{name}</h3>
                 <p>Cost: {cost} cookie(s): Produces {value} cookies/second</p>
@@ -17,7 +30,6 @@ const Item = ({id, name, cost, value, numOwned, handleClick}) => {
         </Button>
         
         
-
     );
 }
 

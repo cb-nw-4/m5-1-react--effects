@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
@@ -25,36 +25,55 @@ const Game = () => {
   };
   
   const [purchasedItems, setPurchasedItems] = useState(initialState);
-  
-  
-  React.useEffect(() => {
-    document.title = `${numCookies} cookies - Cookie Clicker Workshop`
-  
-    return () => {
-      document.title = `Cookie Clicker Workshop`
-    }
-  }, [numCookies])
+  let focusOnMount = false;
 
-
+  
   const handleClick = (item) =>{
-    
+
     if(numCookies-item.cost > 0){
       setNumCookies(numCookies - item.cost);
       setPurchasedItems({...purchasedItems, [item.id]: purchasedItems[item.id]+1})
     }    
     //console.log({...purchasedItems, [item.id]: +1})
-
   }
-
+  
   const calculateCookiesPerTick =(ObjItems) =>{
     let total = 0;
-
+    
     items.map(item => 
       total += ObjItems[item.id] * item.value)
-
-    return total;
-
+      
+      return total;   
   }
+
+  const handleCookiesClick = () =>{
+    setNumCookies((numCookies) => numCookies + 1)
+    console.log(numCookies, 'space cookie')
+  }
+
+  function handleKeydown(ev) {
+    if (ev.code === "Space") {
+      console.log('space')
+      handleCookiesClick()
+    }
+  }
+
+  useEffect(() => {
+    document.title = `${numCookies} cookies - Cookie Clicker Workshop`
+        
+    return () => {
+      document.title = `Cookie Clicker Workshop`
+    }
+  }, [numCookies])   
+
+      
+  useEffect(() => {
+    
+    window.addEventListener("keydown", handleKeydown)
+    return () => {
+      window.removeEventListener("keydown", handleKeydown)
+    };
+  });
 
   useInterval(() => {
     const numOfGeneratedCookies = calculateCookiesPerTick(purchasedItems);
@@ -71,7 +90,7 @@ const Game = () => {
           {/* TODO: Calcuate the cookies per second and show it here: */}
             <strong>{calculateCookiesPerTick(purchasedItems)}</strong> cookies per second
         </Indicator>
-        <Button>
+        <Button onClick={(ev) => handleKeydown(ev)}>
           <Cookie src={cookieSrc} />
         </Button>
       </GameArea>
@@ -84,7 +103,9 @@ const Game = () => {
                 cost={item.cost} 
                 value={item.value}
                 numOwned ={purchasedItems[item.id]}
-                handleClick = {()=> handleClick(item)}/>
+                focusOnMount={focusOnMount = (item.id ==='cursor') }
+                handleClick = {()=> handleClick(item)}
+          />
         ))}
       
       </ItemArea>
