@@ -3,7 +3,8 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import Item from './Item'
 import useInterval from '../hooks/use-interval.hook'
-
+import useDocumentTitle from '../hooks/useDocumentTitle'
+import useKeyDown from '../hooks/useKeyDown'
 import cookieSrc from "../cookie.svg";
 
 const items = [
@@ -23,27 +24,8 @@ const Game = () => {
     setNumCookies(numCookies + 1);
   }, [numCookies]);
     
-  const onKeyDown = useCallback((ev) => {
-    if (ev.code === 'Space') { 
-      handleCookieClick()
-    }
-  }, [handleCookieClick])
-
-  const documentUpdate = () => {
-    document.title = numCookies + ' cookies - Cookie Clicker'
-  }
-    
-    useEffect(() => {
-      documentUpdate()
-    }, [numCookies])
-    
-    useEffect(() => {
-      window.addEventListener('keydown', onKeyDown)
-      return () => {
-        window.removeEventListener('keydown', onKeyDown)
-      }
-    }, [onKeyDown])
-    
+  useKeyDown('Space', handleCookieClick)
+  useDocumentTitle(numCookies, 'cookies')
 
 
     const calculateCookiesPerTick = () => {
