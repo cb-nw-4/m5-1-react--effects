@@ -34,9 +34,10 @@ const Game = () => {
 
   // Prevent the default action of the spacebar registering a click event
   // on the cookie if it has focus.
-  const handleKeyUp = (event) => {
-    event.preventDefault();
-  }
+  // const handleKeyUp = (event) => {
+  //   console.log(event.current.currentTarget);
+  //   event.preventDefault();
+  // }
 
   useEffect(() => {
     window.addEventListener('keydown', handleKeyDown);
@@ -108,14 +109,15 @@ const Game = () => {
           <Total>{numCookies} cookies</Total>
           <strong>{calculateCookiesPerTick(purchasedItems)}</strong> cookies per second
         </Indicator>
-        <Button onClick={handleCookieClick} onKeyUp={handleKeyUp}>
+        <Button onClick={handleCookieClick}>
           <Cookie src={cookieSrc} />
         </Button>
       </GameArea>
 
       <ItemArea>
         <SectionTitle>Items:</SectionTitle>
-        {items.map(item => <Item
+        {items.map((item, index) => <Item
+          firstItem={index === 0 ? true : false}
           key={uuidv4()}
           id={item.id}
           name={item.name}
