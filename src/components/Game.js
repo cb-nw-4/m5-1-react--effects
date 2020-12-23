@@ -29,6 +29,7 @@ const Game = () => {
     farm: 0,
     megaCursor: 0
   });
+  const [indexPosition, setIndexPosition] = useState(0);
   const cookiesPerSecond = calculateCookiesPerTick(purchasedItems);
 
   const handleIncrement = () => {
@@ -57,7 +58,35 @@ const Game = () => {
     setNumCookies(numCookies + numOfGeneratedCookies);
   }, 1000)
 
+  const IndexPositionUp = () => {
+    if (indexPosition !== 0) {
+        setIndexPosition(indexPosition - 1);
+    }
+  }
+
+  const IndexPositionDown = () => {
+    if (indexPosition !== 3) {
+        setIndexPosition(indexPosition + 1);
+    }
+  }
+
+  const purchaseItemsWithKeydown = () => {
+    if (numCookies >= items[indexPosition].cost) {
+      setNumCookies(numCookies - items[indexPosition].cost);
+        setPurchasedItems({
+          ...purchasedItems,
+          [items[indexPosition].id]: purchasedItems[items[indexPosition].id] + 1
+        })
+    }
+    else {
+      window.alert("You don't have enough cookies to purchase this item!");
+    }
+  }
+
   useKeydown('Space', (purchasedItems.megaCursor === 0 ? handleIncrement : handleMegaCursorIncrement));
+  useKeydown('ArrowDown', IndexPositionDown);
+  useKeydown('ArrowUp', IndexPositionUp);
+  useKeydown('Enter', purchaseItemsWithKeydown);
   useDocumentTitle(`${numCookies} cookies - Cookie Clicker Workshop`, 'Cookie Clicker Workshop');
 
   return (
@@ -89,6 +118,7 @@ const Game = () => {
               handleClick={handleClick}
               key={item.id}
               index={index}
+              indexPosition={indexPosition}
             />
           );
         })}

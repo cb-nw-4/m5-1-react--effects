@@ -39,14 +39,14 @@ const ItemCount = styled.span`
     right: 35px;
 `;
 
-const Item = ({ type, numOwned, handleClick, index }) => {
+const Item = ({ type, numOwned, handleClick, index, indexPosition }) => {
     const itemRef = useRef(null);
 
     useEffect(() => {
-        if (index === 0) {
+        if (index === indexPosition) {
             itemRef.current.focus();
         }
-    }, [])
+    }, [indexPosition])
 
     return (
         <ContainerBtn ref={itemRef} onClick={() => handleClick(type)}>
