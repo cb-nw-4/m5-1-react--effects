@@ -79,14 +79,16 @@ const Game = () => {
 
       <ItemArea>
         <SectionTitle>Items:</SectionTitle>
-        {items.map((item)=>(<Item
+        {items.map((item, index)=>(<Item
                               key={item.id}
                               id={item.id}
                               name={item.name}
                               cost={item.cost}
                               value={item.value}
                               numOwned={purchasedItems[item.id]}
-                              handleClick={handleClick}/>))/* TODO: Add <Item> instances here, 1 for each item type. */}
+                              handleClick={handleClick}
+                              focusOnMount={index === 0}
+                              />))/* TODO: Add <Item> instances here, 1 for each item type. */}
       </ItemArea>
       <HomeLink to="/">Return home</HomeLink>
     </Wrapper>
