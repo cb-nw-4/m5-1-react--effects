@@ -37,6 +37,10 @@ const Game = () => {
     return totalValue;
   }
 
+  useEffect(() => {
+    document.title = `${numCookies} cookies`;
+  });
+
   useInterval(() => {
     const numOfGeneratedCookies = calculateCookiesPerTick(purchasedItems);
     // Add this number of cookies to the total
