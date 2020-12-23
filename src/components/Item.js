@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import styled from 'styled-components';
 
 const ContainerBtn = styled.button`
@@ -39,9 +39,17 @@ const ItemCount = styled.span`
     right: 35px;
 `;
 
-const Item = ({ type, numOwned, handleClick }) => {
+const Item = ({ type, numOwned, handleClick, index }) => {
+    const itemRef = useRef(null);
+
+    useEffect(() => {
+        if (index === 0) {
+            itemRef.current.focus();
+        }
+    }, [])
+
     return (
-        <ContainerBtn onClick={() => handleClick(type)}>
+        <ContainerBtn ref={itemRef} onClick={() => handleClick(type)}>
             <SubContainer>
                 <ItemName>{type.name}</ItemName>
                 <ItemInfo>{`Cost: ${type.cost} cookie(s). Produce ${type.value} cookie(s)/second.`}</ItemInfo>

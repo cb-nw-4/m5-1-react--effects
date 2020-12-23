@@ -77,7 +77,6 @@ const Game = () => {
       <GameArea>
         <Indicator>
           <Total>{numCookies} cookies</Total>
-          {/* TODO: Calcuate the cookies per second and show it here: */}
           <strong>{cookiesPerSecond}</strong> cookies per second
         </Indicator>
         <Button onClick={handleIncrement}>
@@ -87,13 +86,14 @@ const Game = () => {
 
       <ItemArea>
         <SectionTitle>Items:</SectionTitle>
-        <>{items.map((item) => {
+        <>{items.map((item, index) => {
           return (
             <Item 
               type={item}
               numOwned={purchasedItems}
               handleClick={handleClick}
               key={item.id}
+              index={index}
             />
           );
         })}
