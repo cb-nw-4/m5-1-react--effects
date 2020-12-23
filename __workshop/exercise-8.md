@@ -7,4 +7,4 @@ In Cookie Clicker, there are two kinds of items:
 
 Right now, we've implemented the first type, but not the second. No matter what we purchase, we always earn exactly 1 cookie per tick.  
    
-Add a new item type, `megaCursor`, which increases the # of cookies per click. You'll need to do some re-working of the game logic and the data format for this to work. 
+Add a new item type, `megaCursor`, which increases the # of cookies per click. You'll need to do some re-working of the game logic and the data format for this to work!
