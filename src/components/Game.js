@@ -22,6 +22,20 @@ const Game = () => {
     farm: 0,
     megaCursor: 0
   })
+  
+  const handleClick = (item) => {
+    if (numCookies < item.cost) {
+      window.alert('you broke')
+    } else {
+      setPurchased({...purchased, [item.id]: purchased[item.id] + 1  })
+      setNumCookies(numCookies - item.cost)
+      items.map (el => {
+        if (el === item) {
+          item.cost = Math.round(item.cost * 1.2)
+        }
+      })
+    }
+  }
 
     const handleCookieClick = useCallback(() => {
     if (purchased.megaCursor >  0) {
@@ -48,18 +62,7 @@ const Game = () => {
      setNumCookies(numCookies + cookieResult)
     }, 1000)
 
-  const handleClick = (item) => {
-    console.log(item)
-    if (numCookies < item.cost) {
-      window.alert('you broke')
-    } else {
-      setPurchased({...purchased, [item.id]: purchased[item.id] + 1  })
-      setNumCookies(numCookies - item.cost)
-    }
-  }
-
-
-
+  
 
   return (
     <Wrapper>
