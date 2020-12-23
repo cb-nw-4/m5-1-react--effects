@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
 
 import Item from "./Item";
 import useKeydown from "./useKeydown"
+import useDocumentTitle from "./useDocumentTitle";
 import useInterval from "../hooks/use-interval.hook"
 
 import cookieSrc from "../cookie.svg";
@@ -32,7 +33,8 @@ const Game = () => {
   const handleCookiesClick = () =>{
     setNumCookies((numCookies) => numCookies + 1)
     //console.log(numCookies, 'space cookie')
-}
+  }
+
 
   useKeydown('Space', handleCookiesClick);
 
@@ -57,15 +59,9 @@ const Game = () => {
   }
 
 
-  useEffect(() => {
-    document.title = `${numCookies} cookies - Cookie Clicker Workshop`
-        
-    return () => {
-      document.title = `Cookie Clicker Workshop`
-    }
-  }, [numCookies])   
+  useDocumentTitle(numCookies, `Cookie Clicker Workshop` );
 
-      
+
 
 
   useInterval(() => {
