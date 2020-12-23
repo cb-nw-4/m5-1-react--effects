@@ -52,7 +52,7 @@ const Item = ({ type, numOwned, handleClick, index }) => {
         <ContainerBtn ref={itemRef} onClick={() => handleClick(type)}>
             <SubContainer>
                 <ItemName>{type.name}</ItemName>
-                <ItemInfo>{`Cost: ${type.cost} cookie(s). Produce ${type.value} cookie(s)/second.`}</ItemInfo>
+                {index === 3 ? <ItemInfo>{`Cost: ${type.cost} cookies. Produce ${type.value} cookie(s)/click.`}</ItemInfo> : <ItemInfo>{`Cost: ${type.cost} cookie(s). Produce ${type.value} cookie(s)/second.`}</ItemInfo>}
             </SubContainer>
             <ItemCount>{numOwned[type.id]}</ItemCount>
         </ContainerBtn>

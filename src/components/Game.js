@@ -13,6 +13,7 @@ const items = [
   { id: "cursor", name: "Cursor", cost: 10, value: 1 },
   { id: "grandma", name: "Grandma", cost: 100, value: 10 },
   { id: "farm", name: "Farm", cost: 1000, value: 80 },
+  { id: "megaCursor", name: "Mega Cursor", cost: 1500, value: 100}
 ];
 
 const calculateCookiesPerTick = (itemsObj) => {
@@ -26,11 +27,16 @@ const Game = () => {
     cursor: 0,
     grandma: 0,
     farm: 0,
+    megaCursor: 0
   });
   const cookiesPerSecond = calculateCookiesPerTick(purchasedItems);
 
   const handleIncrement = () => {
     setNumCookies(numCookies + 1);
+  }
+
+  const handleMegaCursorIncrement = () => {
+    setNumCookies(numCookies + (100 * purchasedItems.megaCursor));
   }
 
   const handleClick = (type) => {
@@ -51,7 +57,7 @@ const Game = () => {
     setNumCookies(numCookies + numOfGeneratedCookies);
   }, 1000)
 
-  useKeydown('Space', handleIncrement);
+  useKeydown('Space', (purchasedItems.megaCursor === 0 ? handleIncrement : handleMegaCursorIncrement));
   useDocumentTitle(`${numCookies} cookies - Cookie Clicker Workshop`, 'Cookie Clicker Workshop');
 
   return (
@@ -61,7 +67,14 @@ const Game = () => {
           <Total>{numCookies} cookies</Total>
           <strong>{cookiesPerSecond}</strong> cookies per second
         </Indicator>
-        <Button onClick={handleIncrement}>
+        <Button onClick={() => {
+          if (purchasedItems.megaCursor === 0) {
+            handleIncrement();
+          }
+          else {
+            handleMegaCursorIncrement();
+          }
+        }}>
           <Cookie src={cookieSrc} />
         </Button>
       </GameArea>
