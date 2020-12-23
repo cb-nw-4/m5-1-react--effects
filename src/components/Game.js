@@ -28,9 +28,13 @@ const Game = () => {
       handleCookieClick()
     }
   }, [handleCookieClick])
+
+  const documentUpdate = () => {
+    document.title = numCookies + ' cookies - Cookie Clicker'
+  }
     
     useEffect(() => {
-      document.title = numCookies + ' cookies - Cookie Clicker'
+      documentUpdate()
     }, [numCookies])
     
     useEffect(() => {
