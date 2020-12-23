@@ -11,6 +11,7 @@ const items = [
   { id: "cursor", name: "Cursor", cost: 10, value: 1 },
   { id: "grandma", name: "Grandma", cost: 100, value: 10 },
   { id: "farm", name: "Farm", cost: 1000, value: 80 },
+  {id:'megaCursor', name: 'MegaCursor', cost: 50, value: 2}
 ];
 
 const Game = () => {
@@ -18,10 +19,16 @@ const Game = () => {
   const [numCookies, setNumCookies] = useState(0)
   const [purchased, setPurchased] = useState({cursor: 0,
     grandma: 0,
-    farm: 0,})
+    farm: 0,
+    megaCursor: 0
+  })
 
     const handleCookieClick = useCallback(() => {
-    setNumCookies(numCookies + 1);
+    if (purchased.megaCursor >  0) {
+      setNumCookies(numCookies + 2)
+    } else {
+      setNumCookies(numCookies + 1);
+    } 
   }, [numCookies]);
     
   useKeyDown('Space', handleCookieClick)

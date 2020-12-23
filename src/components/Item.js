@@ -19,7 +19,7 @@ const Item = ({items, numOwned, handleClick}) => {
       {items.map((item, i)=> {
         return (
       <ItemContainer 
-      ref={i == 0 ? numRef : null} firstMount={true} onClick={() => handleClick(item)}>    
+      ref={i == 0 ? numRef : null}  onClick={() => handleClick(item)}>    
         <div>
           <h1 style={{textAlign:'left'}}>{item.id}</h1>
           <p>{`Cost: ${item.cost} cookie(s). Produces ${item.value} cookies/second`}</p>
