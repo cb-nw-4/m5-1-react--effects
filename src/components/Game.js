@@ -1,40 +1,85 @@
-import React from "react";
+import React, {useState, useEffect, useCallback} from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-
+import Item from './Item'
+import useInterval from '../hooks/use-interval.hook'
+import useDocumentTitle from '../hooks/useDocumentTitle'
+import useKeyDown from '../hooks/useKeyDown'
 import cookieSrc from "../cookie.svg";
 
 const items = [
   { id: "cursor", name: "Cursor", cost: 10, value: 1 },
   { id: "grandma", name: "Grandma", cost: 100, value: 10 },
   { id: "farm", name: "Farm", cost: 1000, value: 80 },
+  {id:'megaCursor', name: 'MegaCursor', cost: 50, value: 2}
 ];
 
 const Game = () => {
   // TODO: Replace this with React state!
-  const numCookies = 100;
-  const purchasedItems = {
-    cursor: 0,
+  const [numCookies, setNumCookies] = useState(0)
+  const [purchased, setPurchased] = useState({cursor: 0,
     grandma: 0,
     farm: 0,
-  };
+    megaCursor: 0
+  })
+  
+  const handleClick = (item) => {
+    if (numCookies < item.cost) {
+      window.alert('you broke')
+    } else {
+      setPurchased({...purchased, [item.id]: purchased[item.id] + 1  })
+      setNumCookies(numCookies - item.cost)
+      items.map (el => {
+        if (el === item) {
+          item.cost = Math.round(item.cost * 1.2)
+        }
+      })
+    }
+  }
+
+    const handleCookieClick = useCallback(() => {
+    if (purchased.megaCursor >  0) {
+      setNumCookies(numCookies + 2)
+    } else {
+      setNumCookies(numCookies + 1);
+    } 
+  }, [numCookies]);
+    
+  useKeyDown('Space', handleCookieClick)
+  useDocumentTitle(numCookies, 'cookies')
+
+
+    const calculateCookiesPerTick = () => {
+      const cursor = purchased.cursor * items[0].value
+      const grandma = purchased.grandma * items[1].value
+    const farm = purchased.farm * items[2].value
+    const totalValue = cursor + grandma + farm
+    return totalValue    
+    }
+  
+  useInterval(() => {
+    const cookieResult = calculateCookiesPerTick()
+     setNumCookies(numCookies + cookieResult)
+    }, 1000)
+
+  
 
   return (
     <Wrapper>
       <GameArea>
         <Indicator>
           <Total>{numCookies} cookies</Total>
-          {/* TODO: Calcuate the cookies per second and show it here: */}
-          <strong>0</strong> cookies per second
+          
+          <strong>{calculateCookiesPerTick()}</strong> cookies per second
         </Indicator>
-        <Button>
+        <Button onClick={handleCookieClick}>
           <Cookie src={cookieSrc} />
         </Button>
       </GameArea>
 
       <ItemArea>
         <SectionTitle>Items:</SectionTitle>
-        {/* TODO: Add <Item> instances here, 1 for each item type. */}
+        <Item items={items} numOwned={purchased} handleClick={handleClick}></Item>
       </ItemArea>
       <HomeLink to="/">Return home</HomeLink>
     </Wrapper>
