@@ -2,7 +2,9 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
+
 import Item from "./Item";
+import useKeydown from "./useKeydown"
 import useInterval from "../hooks/use-interval.hook"
 
 import cookieSrc from "../cookie.svg";
@@ -27,6 +29,14 @@ const Game = () => {
   const [purchasedItems, setPurchasedItems] = useState(initialState);
   let focusOnMount = false;
 
+  const handleCookiesClick = () =>{
+    setNumCookies((numCookies) => numCookies + 1)
+    //console.log(numCookies, 'space cookie')
+}
+
+  useKeydown('Space', handleCookiesClick);
+
+
   
   const handleClick = (item) =>{
 
@@ -46,17 +56,6 @@ const Game = () => {
       return total;   
   }
 
-  const handleCookiesClick = () =>{
-    setNumCookies((numCookies) => numCookies + 1)
-    console.log(numCookies, 'space cookie')
-  }
-
-  function handleKeydown(ev) {
-    if (ev.code === "Space") {
-      console.log('space')
-      handleCookiesClick()
-    }
-  }
 
   useEffect(() => {
     document.title = `${numCookies} cookies - Cookie Clicker Workshop`
@@ -67,13 +66,7 @@ const Game = () => {
   }, [numCookies])   
 
       
-  useEffect(() => {
-    
-    window.addEventListener("keydown", handleKeydown)
-    return () => {
-      window.removeEventListener("keydown", handleKeydown)
-    };
-  });
+
 
   useInterval(() => {
     const numOfGeneratedCookies = calculateCookiesPerTick(purchasedItems);
@@ -90,9 +83,10 @@ const Game = () => {
           {/* TODO: Calcuate the cookies per second and show it here: */}
             <strong>{calculateCookiesPerTick(purchasedItems)}</strong> cookies per second
         </Indicator>
-        <Button onClick={(ev) => handleKeydown(ev)}>
+        <Button onClick={handleCookiesClick}>
           <Cookie src={cookieSrc} />
         </Button>
+
       </GameArea>
 
       <ItemArea>
