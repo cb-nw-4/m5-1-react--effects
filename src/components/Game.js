@@ -8,6 +8,7 @@ import Item from './Item';
 import useInterval from '../hooks/use-interval.hook';
 import useKeydown from '../hooks/use-keydown.hook';
 import useDocumentTitle from '../hooks/use-documentTitle.hook';
+import useKeyup from '../hooks/use-keyup.hook';
 
 const calculateCookiesPerTick = (itemsObj) => {
   const amount = (itemsObj.cursor * 1) + (itemsObj.grandma * 10) + (itemsObj.farm * 80);
@@ -29,6 +30,7 @@ const Game = () => {
     farm: 1000,
     megaCursor: 1500
   });
+  const [active, setActive] = useState(false);
   const cookiesPerSecond = calculateCookiesPerTick(purchasedItems);
 
   const items = [
@@ -38,12 +40,26 @@ const Game = () => {
     { id: "megaCursor", name: "Mega Cursor", cost: itemCosts.megaCursor, value: 100}
   ];
 
+  const toggleActive = () => {
+    setActive(false);
+  }
+  
   const handleIncrement = () => {
     setNumCookies(numCookies + 1);
   }
 
+  const handleIncrementWithKeydown = () => {
+    setNumCookies(numCookies + 1);
+    setActive(true);
+  }
+
   const handleMegaCursorIncrement = () => {
     setNumCookies(numCookies + (100 * purchasedItems.megaCursor));
+  }
+
+  const handleMegaCursorIncrementWithKeydown = () => {
+    setNumCookies(numCookies + (100 * purchasedItems.megaCursor));
+    setActive(true);
   }
 
   const handleClick = (type) => {
@@ -69,13 +85,13 @@ const Game = () => {
   }, 1000)
 
   const IndexPositionUp = () => {
-    if (indexPosition !== 0) {
+    if (indexPosition > 0) {
         setIndexPosition(indexPosition - 1);
     }
   }
 
   const IndexPositionDown = () => {
-    if (indexPosition !== 3) {
+    if (indexPosition < 3) {
         setIndexPosition(indexPosition + 1);
     }
   }
@@ -97,7 +113,8 @@ const Game = () => {
     }
   }
 
-  useKeydown('Space', (purchasedItems.megaCursor === 0 ? handleIncrement : handleMegaCursorIncrement));
+  useKeydown('Space', (purchasedItems.megaCursor === 0 ? handleIncrementWithKeydown : handleMegaCursorIncrementWithKeydown));
+  useKeyup('Space', toggleActive);
   useKeydown('ArrowDown', IndexPositionDown);
   useKeydown('ArrowUp', IndexPositionUp);
   useKeydown('Enter', purchaseItemsWithKeydown);
@@ -110,14 +127,17 @@ const Game = () => {
           <Total>{numCookies} cookies</Total>
           <strong>{cookiesPerSecond}</strong> cookies per second
         </Indicator>
-        <Button onClick={() => {
-          if (purchasedItems.megaCursor === 0) {
-            handleIncrement();
-          }
-          else {
-            handleMegaCursorIncrement();
-          }
-        }}>
+        <Button 
+          className={active === true ? 'active' : ''}
+          onClick={() => {
+            if (purchasedItems.megaCursor === 0) {
+              handleIncrement();
+            }
+            else {
+              handleMegaCursorIncrement();
+            }
+          }}
+        >
           <Cookie src={cookieSrc} />
         </Button>
       </GameArea>
@@ -156,6 +176,14 @@ const Button = styled.button`
   border: none;
   background: transparent;
   cursor: pointer;
+  outline: inherit;
+
+    &:active,
+    &.active {
+      box-shadow: 0 0 0 3pt rgb(40, 119, 247);
+      border-radius: 3px;
+      transform: scale(1.3, 1.3);
+    }
 `;
 
 const Cookie = styled.img`
