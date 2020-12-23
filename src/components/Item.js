@@ -6,16 +6,20 @@ const Item = ({items, numOwned, handleClick}) => {
   const numRef = useRef()
 
   useEffect(() => {
-      numRef.current.children[0].focus()
+      
+        console.log(numRef.current)
+        numRef.current.focus()
+      
   }, [])
 
 
 
   return (
-    <ItemTypeWrapper ref={numRef}>
-      {items.map((item)=> {
+    <ItemTypeWrapper >
+      {items.map((item, i)=> {
         return (
-      <ItemContainer onClick={() => handleClick(item)}>    
+      <ItemContainer 
+      ref={i == 0 ? numRef : null} firstMount={true} onClick={() => handleClick(item)}>    
         <div>
           <h1 style={{textAlign:'left'}}>{item.id}</h1>
           <p>{`Cost: ${item.cost} cookie(s). Produces ${item.value} cookies/second`}</p>
