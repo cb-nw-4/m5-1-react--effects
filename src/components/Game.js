@@ -1,8 +1,10 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useCallback } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import Item from './Item';
 import useInterval from '../hooks/use-interval.hook';
+import useKeyDown from '../hooks/use-keydown.hook';
+import useDocumentTitle from '../hooks/use-documentTitle.hook';
 
 import cookieSrc from "../cookie.svg";
 
@@ -20,6 +22,7 @@ const Game = () => {
     grandma: 0,
     farm: 0,
   });  
+  
 
   const calculateCookiesPerTick = (purchasedItems)=>{
     const cookiesperTick = items.reduce((a, b)=>{
@@ -36,26 +39,15 @@ const Game = () => {
     }
     setNumCookies(prevNumCookies => prevNumCookies - cost);
     setPurchasedItems({...purchasedItems, [id]: purchasedItems[id] + 1});  
-  };
+  };  
+
+  const setNumCookiesCallback = useCallback(()=>{
+    setNumCookies(prevNumCookies => prevNumCookies + 1);
+  }, []); 
  
-  const handleKeydown = useCallback((ev) => {  
-    if (ev.code === "Space") {     
-      setNumCookies(prevNumCookies => prevNumCookies + 1);
-    }
-  }, []);
+  useDocumentTitle(`${numCookies} cookies - Cookie Clicker Workshop`, 'Cookie Clicker Workshop');
   
-  useEffect(()=>{
-    document.title = `${numCookies} cookies - Cookie Clicker Workshop`;
-
-    return () =>{document.title = 'Cookie Clicker Workshop'}   
-  }, [numCookies]);
-
-
-  useEffect(()=>{   
-    window.addEventListener("keydown", handleKeydown);
-
-    return () =>{window.removeEventListener("keydown", handleKeydown)}   
-  }, [handleKeydown]);
+  useKeyDown(setNumCookiesCallback, "Space");  
 
   useInterval(() => {
     const numOfGeneratedCookies = calculateCookiesPerTick(purchasedItems);  
