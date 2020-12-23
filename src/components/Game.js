@@ -9,13 +9,6 @@ import useInterval from '../hooks/use-interval.hook';
 import useKeydown from '../hooks/use-keydown.hook';
 import useDocumentTitle from '../hooks/use-documentTitle.hook';
 
-const items = [
-  { id: "cursor", name: "Cursor", cost: 10, value: 1 },
-  { id: "grandma", name: "Grandma", cost: 100, value: 10 },
-  { id: "farm", name: "Farm", cost: 1000, value: 80 },
-  { id: "megaCursor", name: "Mega Cursor", cost: 1500, value: 100}
-];
-
 const calculateCookiesPerTick = (itemsObj) => {
   const amount = (itemsObj.cursor * 1) + (itemsObj.grandma * 10) + (itemsObj.farm * 80);
   return amount;
@@ -30,7 +23,20 @@ const Game = () => {
     megaCursor: 0
   });
   const [indexPosition, setIndexPosition] = useState(0);
+  const [itemCosts, setItemCosts] = useState({
+    cursor: 10,
+    grandma: 100,
+    farm: 1000,
+    megaCursor: 1500
+  });
   const cookiesPerSecond = calculateCookiesPerTick(purchasedItems);
+
+  const items = [
+    { id: "cursor", name: "Cursor", cost: itemCosts.cursor, value: 1 },
+    { id: "grandma", name: "Grandma", cost: itemCosts.grandma, value: 10 },
+    { id: "farm", name: "Farm", cost: itemCosts.farm, value: 80 },
+    { id: "megaCursor", name: "Mega Cursor", cost: itemCosts.megaCursor, value: 100}
+  ];
 
   const handleIncrement = () => {
     setNumCookies(numCookies + 1);
@@ -46,6 +52,10 @@ const Game = () => {
       setPurchasedItems({
         ...purchasedItems,
         [type.id]: purchasedItems[type.id] + 1
+      })
+      setItemCosts({
+        ...itemCosts,
+        [type.id]: Math.ceil(itemCosts[type.id] * 1.25)
       })
     }
     else {
@@ -76,6 +86,10 @@ const Game = () => {
         setPurchasedItems({
           ...purchasedItems,
           [items[indexPosition].id]: purchasedItems[items[indexPosition].id] + 1
+        })
+        setItemCosts({
+          ...itemCosts,
+          [items[indexPosition].id]: Math.ceil(itemCosts[items[indexPosition].id] * 1.25)
         })
     }
     else {
