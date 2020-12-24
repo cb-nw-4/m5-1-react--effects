@@ -37,9 +37,26 @@ const Game = () => {
     return totalValue;
   }
 
+  const spacebar = (ev) => {
+    if (ev.code === 'Space') {
+      setNumCookies(numCookies + 1);
+    } 
+  }
+  
+  
   useEffect(() => {
     document.title = `${numCookies} cookies`;
-  });
+  }, [numCookies]);
+
+
+  useEffect(() => {
+    window.addEventListener('keydown', spacebar)
+
+    return () => {
+      window.removeEventListener('keydown', spacebar)
+    }
+  }, [spacebar])
+
 
   useInterval(() => {
     const numOfGeneratedCookies = calculateCookiesPerTick(purchasedItems);
