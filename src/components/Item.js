@@ -2,20 +2,21 @@ import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 
 
-const Item = ({ id, name, cost, value, numOwned, handleClick, focusOnMount })=>{  
+const Item = ({ id, name, cost, value, perTick, numOwned, handleClick, focusOnMount })=>{  
     const ref = useRef(null);
+    const typeString = perTick ? 'second': 'click';
 
     useEffect(() => {
        if (focusOnMount){
          ref.current.focus();
        }
-      }, [focusOnMount]);
+      }, [focusOnMount]);      
 
     return(
         <Link href="#" onClick={(ev)=> handleClick(ev, id, cost)} ref={ref} >
             <div>
-                <h1>{name}</h1>
-                <Text>{`Cost: ${cost} cookie(s). Produces ${value} cookies/second.`}</Text>        
+                <h1>{name}</h1>                
+                <Text>{`Cost: ${cost} cookie(s). Produces ${value} cookies/${typeString}.`}</Text>        
             </div>
             <Number>{numOwned}</Number>
         </Link>

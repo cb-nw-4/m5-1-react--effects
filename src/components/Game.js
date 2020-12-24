@@ -9,9 +9,10 @@ import useDocumentTitle from '../hooks/use-documentTitle.hook';
 import cookieSrc from "../cookie.svg";
 
 const items = [
-  { id: "cursor", name: "Cursor", cost: 10, value: 1 },
-  { id: "grandma", name: "Grandma", cost: 100, value: 10 },
-  { id: "farm", name: "Farm", cost: 1000, value: 80 },
+  { id: "cursor", name: "Cursor", cost: 10, value: 1, perTick:true },
+  { id: "grandma", name: "Grandma", cost: 100, value: 10, perTick:true },
+  { id: "farm", name: "Farm", cost: 1000, value: 80, perTick:true },
+  { id: "megaCursor", name: "megaCursor", cost: 2000, value: 10, perTick:false }
 ];
 
 const Game = () => {
@@ -21,12 +22,20 @@ const Game = () => {
     cursor: 0,
     grandma: 0,
     farm: 0,
-  });  
-  
+    megaCursor: 0
+  });    
+
+  const calculateCookiesPerClick = (megaCursorNum)=>{
+    const cookiesperClick = items.reduce((a, b)=>{
+      return !b.perTick ? a + b.value * megaCursorNum : a;
+    }, 1);
+    console.log('cookiesperClick', cookiesperClick);
+    return cookiesperClick;
+  };   
 
   const calculateCookiesPerTick = (purchasedItems)=>{
     const cookiesperTick = items.reduce((a, b)=>{
-      return a + b.value * purchasedItems[b.id];
+      return b.perTick ? a + b.value * purchasedItems[b.id] : a;
     }, 0);
     return cookiesperTick;
   };  
@@ -42,8 +51,8 @@ const Game = () => {
   };  
 
   const setNumCookiesCallback = useCallback(()=>{
-    setNumCookies(prevNumCookies => prevNumCookies + 1);
-  }, []); 
+    setNumCookies(prevNumCookies => prevNumCookies + calculateCookiesPerClick(purchasedItems.megaCursor));
+  }, [purchasedItems.megaCursor]); 
  
   useDocumentTitle(`${numCookies} cookies - Cookie Clicker Workshop`, 'Cookie Clicker Workshop');
   
@@ -62,9 +71,10 @@ const Game = () => {
         <Indicator>
           <Total>{numCookies} cookies</Total>
           {/* TODO: Calcuate the cookies per second and show it here: */}
-          <strong>{calculateCookiesPerTick(purchasedItems)}</strong> cookies per second
+          <p><strong>{calculateCookiesPerTick(purchasedItems)}</strong> cookies per second </p>
+          <p><strong>{calculateCookiesPerClick(purchasedItems.megaCursor)}</strong> cookie(s) per click</p>
         </Indicator>
-        <Button onClick={()=>(setNumCookies(prevNumCookies => prevNumCookies + 1))}>
+        <Button onClick={setNumCookiesCallback}>
           <Cookie src={cookieSrc} />
         </Button>
       </GameArea>
@@ -77,6 +87,7 @@ const Game = () => {
                               name={item.name}
                               cost={item.cost}
                               value={item.value}
+                              perTick={item.perTick}
                               numOwned={purchasedItems[item.id]}
                               handleClick={handleClick}
                               focusOnMount={index === 0}
