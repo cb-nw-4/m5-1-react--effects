@@ -12,7 +12,7 @@ const items = [
   { id: "cursor", name: "Cursor", cost: 10, value: 1, perTick:true },
   { id: "grandma", name: "Grandma", cost: 100, value: 10, perTick:true },
   { id: "farm", name: "Farm", cost: 1000, value: 80, perTick:true },
-  { id: "megaCursor", name: "megaCursor", cost: 2000, value: 10, perTick:false }
+  { id: "megaCursor", name: "megaCursor", cost: 100, value: 10, perTick:false }
 ];
 
 const Game = () => {
@@ -40,12 +40,20 @@ const Game = () => {
     return cookiesperTick;
   };  
 
+  const costGrowth = (itemId, numPurchagedItems) =>{
+    items.forEach((item)=>{
+      if (item.id === itemId)
+        item.cost = item.cost + Math.pow(item.cost.toString().length, numPurchagedItems);
+    });
+  };
+
   const handleClick = (ev, id, cost)=>{
     ev.preventDefault();
     if (numCookies < cost){
       window.alert("You need more cookies!");
       return;
     }
+    costGrowth(id, purchasedItems[id] + 1);
     setNumCookies(prevNumCookies => prevNumCookies - cost);
     setPurchasedItems({...purchasedItems, [id]: purchasedItems[id] + 1});  
   };  
