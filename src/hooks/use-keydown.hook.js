@@ -1,8 +1,6 @@
 import { useEffect, useCallback } from 'react';
 
-function useKeyDown(callback, code) {
-
-      
+function useKeyDown(callback, code) {      
     const handleKeydown = useCallback((ev) => {  
         if (ev.code === code) {     
             callback();
@@ -14,7 +12,6 @@ function useKeyDown(callback, code) {
     
         return () =>{window.removeEventListener("keydown", handleKeydown)}   
       }, [handleKeydown]);
-
 };
 
 export default useKeyDown

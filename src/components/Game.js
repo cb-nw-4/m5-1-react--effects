@@ -40,9 +40,12 @@ const Game = () => {
   };  
 
   const costGrowth = (itemId, numPurchagedItems) =>{
+
     items.forEach((item)=>{
-      if (item.id === itemId)
-        item.cost = item.cost + Math.pow(item.cost.toString().length, numPurchagedItems);
+      if (item.id === itemId) {
+        console.log(item.cost.toString().length *  numPurchagedItems);
+        item.cost = item.cost + item.cost.toString().length *  numPurchagedItems;
+      }
     });
   };
 
@@ -76,8 +79,7 @@ const Game = () => {
     <Wrapper>
       <GameArea>
         <Indicator>
-          <Total>{numCookies} cookies</Total>
-          {/* TODO: Calcuate the cookies per second and show it here: */}
+          <Total>{numCookies} cookies</Total>       
           <p><strong>{calculateCookiesPerTick(purchasedItems)}</strong> cookies per second </p>
           <p><strong>{calculateCookiesPerClick(purchasedItems.megaCursor)}</strong> cookie(s) per click</p>
         </Indicator>
@@ -98,7 +100,7 @@ const Game = () => {
                               numOwned={purchasedItems[item.id]}
                               handleClick={handleClick}
                               focusOnMount={index === 0}
-                              />))/* TODO: Add <Item> instances here, 1 for each item type. */}
+                              />))}
       </ItemArea>
       <HomeLink to="/">Return home</HomeLink>
     </Wrapper>
