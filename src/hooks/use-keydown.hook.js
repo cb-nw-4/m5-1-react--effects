@@ -9,9 +9,7 @@ function useKeyDown(callback, code) {
         }
       }, [code, callback]);     
 
-    useEffect(()=>{   
-        console.log("useKeyDown");
-
+    useEffect(()=>{ 
         window.addEventListener("keydown", handleKeydown);
     
         return () =>{window.removeEventListener("keydown", handleKeydown)}   

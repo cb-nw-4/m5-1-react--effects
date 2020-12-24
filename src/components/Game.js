@@ -28,8 +28,7 @@ const Game = () => {
   const calculateCookiesPerClick = (megaCursorNum)=>{
     const cookiesperClick = items.reduce((a, b)=>{
       return !b.perTick ? a + b.value * megaCursorNum : a;
-    }, 1);
-    console.log('cookiesperClick', cookiesperClick);
+    }, 1);    
     return cookiesperClick;
   };   
 
