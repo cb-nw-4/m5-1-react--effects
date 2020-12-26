@@ -1,29 +1,31 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 
 
-const Item=({items, purchasedItems, handleClick})=>{
+const Item=({key, id, index, name, cost, value, purchasedItems, handleClick})=>{
+    // const ref = React.useRef(null);
+
+    // useEffect(() => {
+    //     if (index === 0) {
+    //     ref.current.focus();
+    //     }
+    // }, []);
     return (
         <>
-            {items.map(el=>{
-                return (
-                    <Wrapper>
-                        <Items 
-                        onClick={handleClick}
-                        id={el.id}
-                        >
-                            <Name id={el.id}>{el.name}</Name>
-                            <Description id={el.id}>
-                                Cost: {el.cost} cookie(s). Produces {el.value} cookies/second
-                            </Description>
-                        </Items>
-                        <Purchased>
-                            {purchasedItems[el.id]}
-                        </Purchased>
-                        
-                    </Wrapper>
-                )
-            })}
+            <Wrapper>
+                <Items 
+                onClick={handleClick}
+                index={index}
+                >
+                    <Name>{name}</Name>
+                    <Description>
+                        Cost: {cost} cookie(s). Produces {value} cookies/second
+                    </Description>
+                </Items>
+                <Purchased>
+                    {purchasedItems}
+                </Purchased>
+            </Wrapper>
         </>
     )
 }

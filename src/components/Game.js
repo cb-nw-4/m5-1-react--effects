@@ -4,10 +4,15 @@ import { Link } from "react-router-dom";
 import Item from "./Items"
 import cookieSrc from "../cookie.svg";
 import useInterval from '../hooks/use-interval.hook'
+import useHandleKeyDown from "../hooks/useHandleKeyDown.hook";
 
 const items = [
   { id: "cursor", name: "Cursor", cost: 10, value: 1 },
-  { id: "grandma", name: "Grandma", cost: 100, value: 10 },
+  { id: "chef", name: "Chef", cost: 30, value: 5 },
+  { id: "dorothy", name: "Dorothy", cost: 70, value: 8 },
+  { id: "blanche", name: "Blanche", cost: 100, value: 10 },
+  { id: "rose", name: "Rose", cost: 345, value: 30 },
+  { id: "sophia", name: "Sophia", cost: 680, value: 55 },
   { id: "farm", name: "Farm", cost: 1000, value: 80 },
 ];
 
@@ -16,7 +21,11 @@ const Game = () => {
   const [numCookies, setNumCookies]=useState(100);
   const [purchasedItems, setPurchasedItems]= useState({
     cursor: 0,
-    grandma: 0,
+    chef:0,
+    dorothy:0,
+    blanche: 0,
+    rose:0,
+    sophia:0,
     farm: 0,
   });
   const [cookiesPerSec, setCookiesPerSec]=useState(0);
@@ -37,20 +46,8 @@ const Game = () => {
     setCookiesPerSec(numOfGeneratedCookies);
   }, 1000);
 
-  const handleClick=(ev)=>{
-    let id=ev.target.id;
-    const updateItems={
-      ...purchasedItems,
-      [id]:purchasedItems[id]+1
-    }
-    setPurchasedItems(updateItems);
-  }
-
-  const handleKeydown=(ev)=>{
-    if (ev.code === "Space") {
-      setNumCookies(numCookies+1);
-      console.log(numCookies);
-    }
+  const addCookie=()=>{
+    return setNumCookies(numCookies+1); 
   }
 
   useEffect(()=>{
@@ -60,12 +57,7 @@ const Game = () => {
     }
   },[numCookies]);
 
-  useEffect(()=>{
-    window.addEventListener('keydown', handleKeydown);
-    return ()=>{
-      window.removeEventListener('keydown', handleKeydown);
-    }
-  },[handleKeydown]);
+  useHandleKeyDown("Space", addCookie);
   
 
   return (
@@ -86,11 +78,34 @@ const Game = () => {
 
       <ItemArea>
         <SectionTitle>Items:</SectionTitle>
-        {/* TODO: Add <Item> instances here, 1 for each item type. */}
-        <Item 
-        items={items} 
-        purchasedItems={purchasedItems} 
-        handleClick={handleClick}/>
+        {items.map((el,index)=>{
+          return(
+            <>
+              <Item 
+              key={el.id}
+              id={el.id}
+              index={index}
+              name={el.name}
+              cost={el.cost}
+              value={el.value}
+              purchasedItems={purchasedItems[el.id]} 
+              handleClick={()=>{
+                if(numCookies<el.cost){
+                  window.alert("You ain't got enough cookies! You gots to wait, Felicia!")
+                }
+                else{
+                  setNumCookies(numCookies-el.cost);
+                  const updateItems={
+                    ...purchasedItems,
+                    [el.id]:purchasedItems[el.id]+1
+                  }
+                  setPurchasedItems(updateItems);
+                }
+                
+              }}/>
+            </>
+          )})}
+        
       </ItemArea>
       <HomeLink to="/">Return home</HomeLink>
     </Wrapper>
