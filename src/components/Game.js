@@ -43,7 +43,7 @@ const Game = () => {
     } 
   }
   
-  
+
   useEffect(() => {
     document.title = `${numCookies} cookies`;
   }, [numCookies]);
@@ -64,24 +64,39 @@ const Game = () => {
     setNumCookies(numCookies + numOfGeneratedCookies);
   }, 1000);
 
+  let focusOnMount;
+
   return (
     <Wrapper>
       <GameArea>
         <Indicator>
           <Total>{numCookies} cookies</Total>
-          {/* TODO: Calcuate the cookies per second and show it here: */}
           <strong>{calculateCookiesPerTick(purchasedItems)}</strong> cookies per second
         </Indicator>
         <Button onClick={() => setNumCookies(numCookies + 1)}>
-        {/* <Button onClick={() => handleClick()}> */}
           <Cookie src={cookieSrc} />
         </Button>
       </GameArea>
 
       <ItemArea>
         <SectionTitle>Items:</SectionTitle>
-        {items.map((item) => {
-          return <Button onClick={() => handleClick(item)}><Item name={item.name} cost={item.cost} value={item.value} count={purchasedItems[item.id]}>{item.name}</Item></Button>
+        {items.map((item, index) => {
+          if (index === 0) {
+            focusOnMount = true;
+          } else {
+            focusOnMount = false;
+          };
+          return (
+          <Button onClick={() => handleClick(item)}>
+            <Item 
+              name={item.name} 
+              cost={item.cost} 
+              value={item.value} 
+              count={purchasedItems[item.id]} 
+              index={index}
+              focusOnMount={focusOnMount}>{item.name}</Item>
+            </Button>
+          )
         })}
       </ItemArea>
       <HomeLink to="/">Return home</HomeLink>

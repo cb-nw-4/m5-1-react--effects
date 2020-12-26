@@ -1,33 +1,38 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import styled from "styled-components";
 
-const Item = ({ name, cost, value, count }) => {
+const Item = ({ name, cost, value, count, focusOnMount }) => {
+
+  const itemRef = useRef(null);
+
+  useEffect(() => {
+    if (focusOnMount) {
+      itemRef.current.focus();
+    }
+  }, []);
+
+
   return (
-    <Wrapper>
-      <ItemContainer>
-          <ItemInfo>
+    <ItemContainer ref={itemRef}>
+        <ItemInfo>
             <Name>{name}</Name>
             <ItemDescription>{`Cost: ${cost} cookies(s). Produces ${value} cookies/second.`}</ItemDescription>
           </ItemInfo>
           <Count>{count}</Count>
       </ItemContainer>  
-    </Wrapper>
   )
 }
 
-const Wrapper = styled.div` 
-    display: flex;
-    flex-direction: column;
-    width: 500px;
-`;
 
-const ItemContainer = styled.div` 
+const ItemContainer = styled.button` 
     display: flex;
     justify-content: space-between;
     width: 500px;
+    border: none;
     border-bottom: 1px solid white;
     margin: 15px;
-    padding-bottom: 15px;
+    padding-bottom: 20px;
+    background: inherit;
 `;
 
 const ItemInfo = styled.div` 
