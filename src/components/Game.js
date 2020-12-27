@@ -12,12 +12,13 @@ const items = [
   { id: "cursor", name: "Cursor", cost: 10, value: 1 },
   { id: "grandma", name: "Grandma", cost: 100, value: 10 },
   { id: "farm", name: "Farm", cost: 1000, value: 80 },
+  { id: "MegaCursor", name: "MegaCursor", cost: 25, value: 0}
 ];
 
 
 const Game = () => {
   const [numCookies, setNumCookies] = useState(100)
-  const [purchasedItems, setPurchasedItems] = useState({cursor: 0, grandma: 0,farm: 0,})
+  const [purchasedItems, setPurchasedItems] = useState({cursor: 0, grandma: 0,farm: 0, MegaCursor: 0})
 
   const handleClick = (selectedItem) => {
     if (numCookies < selectedItem.cost) {
@@ -30,7 +31,11 @@ const Game = () => {
     }
   };
 
-  useKeyDown(32, handleClick);
+  const handleMegaClick = () => {
+    setNumCookies(numCookies + (5 * purchasedItems.MegaCursor));
+  };
+
+  useKeyDown(32, (purchasedItems.MegaCursor === 0 ? handleClick : handleMegaClick));
   useDocumentTitle(`${numCookies} cookies – Cookie Clicker Workshop`, 'Cookie Clicker Workshop');
 
   const calculateCookiesPerTick = (purchasedItems) => {
@@ -59,7 +64,7 @@ const Game = () => {
           <Total>{numCookies} cookies</Total>
           <strong>{calculateCookiesPerTick(purchasedItems)}</strong> cookies per second
         </Indicator>
-        <Button onClick={() => setNumCookies(numCookies + 1)}>
+          <Button onClick={() => (purchasedItems.MegaCursor === 0 ? setNumCookies(numCookies + 1) : setNumCookies((numCookies + (5 * purchasedItems.MegaCursor))))}>
           <Cookie src={cookieSrc} />
         </Button>
       </GameArea>
@@ -80,10 +85,11 @@ const Game = () => {
               value={item.value} 
               count={purchasedItems[item.id]} 
               index={index}
+              id={item.id}
               focusOnMount={focusOnMount}>{item.name}</Item>
             </Button>
           )
-        })}
+        })}        
       </ItemArea>
       <HomeLink to="/">Return home</HomeLink>
     </Wrapper>

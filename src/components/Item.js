@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import styled from "styled-components";
 
-const Item = ({ name, cost, value, count, focusOnMount }) => {
+const Item = ({ name, cost, value, count, id, focusOnMount }) => {
 
   const itemRef = useRef(null);
 
@@ -15,14 +15,16 @@ const Item = ({ name, cost, value, count, focusOnMount }) => {
   return (
     <ItemContainer ref={itemRef}>
         <ItemInfo>
-            <Name>{name}</Name>
-            <ItemDescription>{`Cost: ${cost} cookies(s). Produces ${value} cookies/second.`}</ItemDescription>
+          <Name>{name}</Name>
+            {id === "MegaCursor"
+              ? <ItemDescription>{`Cost: ${cost} cookies(s). Produces 5 cookies/click.`}</ItemDescription>
+              : <ItemDescription>{`Cost: ${cost} cookies(s). Produces ${value} cookies/second.`}</ItemDescription>
+            }
           </ItemInfo>
           <Count>{count}</Count>
       </ItemContainer>  
   )
 }
-
 
 const ItemContainer = styled.button` 
     display: flex;
