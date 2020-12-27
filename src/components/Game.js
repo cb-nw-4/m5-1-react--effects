@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import Item from "./Item";
+import useKeyDown from "./useKeyDown";
+import useDocumentTitle from "./useDocumentTitle";
 import useInterval from "./../hooks/use-interval.hook";
-
 
 import cookieSrc from "../cookie.svg";
 
@@ -13,10 +14,10 @@ const items = [
   { id: "farm", name: "Farm", cost: 1000, value: 80 },
 ];
 
+
 const Game = () => {
   const [numCookies, setNumCookies] = useState(100)
   const [purchasedItems, setPurchasedItems] = useState({cursor: 0, grandma: 0,farm: 0,})
-
 
   const handleClick = (selectedItem) => {
     if (numCookies < selectedItem.cost) {
@@ -29,38 +30,23 @@ const Game = () => {
     }
   };
 
+  useKeyDown(32, handleClick);
+  useDocumentTitle(`${numCookies} cookies – Cookie Clicker Workshop`, 'Cookie Clicker Workshop');
+
   const calculateCookiesPerTick = (purchasedItems) => {
     let totalValue = 0;
     items.forEach((item) => {
       totalValue += (purchasedItems[item.id] * item.value)
     })
     return totalValue;
-  }
-
-  const spacebar = (ev) => {
-    if (ev.code === 'Space') {
-      setNumCookies(numCookies + 1);
-    } 
-  }
-  
+  }  
 
   useEffect(() => {
     document.title = `${numCookies} cookies`;
   }, [numCookies]);
 
-
-  useEffect(() => {
-    window.addEventListener('keydown', spacebar)
-
-    return () => {
-      window.removeEventListener('keydown', spacebar)
-    }
-  }, [spacebar])
-
-
   useInterval(() => {
     const numOfGeneratedCookies = calculateCookiesPerTick(purchasedItems);
-    // Add this number of cookies to the total
     setNumCookies(numCookies + numOfGeneratedCookies);
   }, 1000);
 
