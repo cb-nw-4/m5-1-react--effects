@@ -7,49 +7,43 @@ const Item = ({
   setCookieCount,
   purchasedItems,
   handleClick,
+ 
   setPurchasedItems,
   id,
 }) => {
-  const [numOwned, setNumOwned] = useState(0);
+    const [numOwned, setNumOwned] = useState(0);
   const [categorySelected, setCategorySelected] = useState([""]);
   const [cost, setCost] = useState(0);
   const [isClicked, setIsClicked] = useState(false);
-const useUpdateCost = () => {
-   
+  const useUpdateCost = () => {
+    useEffect(() => {
+      if (isClicked) {
+        console.log(isClicked);
+        setNumOwned(numOwned + 1);
+        let newPurchased = (purchasedItems[id] += 1);
+        let updateValues = `${categorySelected}: ${newPurchased}`;
+        setCost(updateValues);
 
-  useEffect(() => {
-   
-    if (isClicked) {
-      console.log(isClicked);
-      setNumOwned(numOwned + 1);
-      let newPurchased = purchasedItems[id] += 1;
-      let updateValues = (`${categorySelected}: ${newPurchased}`)
-     setCost(updateValues);
-    
-     if(categorySelected === Object.keys(purchasedItems))
-     {
-  alert("good")
-        
-    }
-
-}
-  }, [handleClick]);
-}
-useUpdateCost();
+        if (categorySelected === Object.keys(purchasedItems)) {
+          alert("good");
+        }
+      }
+      return () => setIsClicked(false);
+    }, [isClicked]);
+  };
+  useUpdateCost();
 
   const handleChange = (event) => {
     handleClick(event.currentTarget.id);
-   
+
     setIsClicked(true);
     setCategorySelected(event.currentTarget.id);
     const itemsName = Object.keys(purchasedItems);
     console.log(itemsName);
 
-    if (cookieCount > 0) {
+
       setCookieCount(cookieCount - event.currentTarget.value);
-    } else {
-      return alert("You are out of cookies!");
-    }
+    
   };
 
   const fullList = items.map((it) => {
