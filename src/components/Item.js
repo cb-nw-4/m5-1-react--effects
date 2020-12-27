@@ -1,50 +1,83 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import ClickedItem from "./ClickedItem";
 
-const Item = ({ items, cookieCount, setCookieCount, purchasedItems }) => {
-  const { cursor, grandma, farm } = purchasedItems;
+const Item = ({
+  items,
+  cookieCount,
+  setCookieCount,
+  purchasedItems,
+  handleClick,
+  setPurchasedItems,
+  id,
+}) => {
   const [numOwned, setNumOwned] = useState(0);
-  const [categorySelected, setCategorySelected] = useState(false);
-  const [isClicked, setIsClicked] = useState([""]);
-
-  const [allCategory, setAllCategory] = useState(purchasedItems);
-
-  console.log(allCategory);
+  const [categorySelected, setCategorySelected] = useState([""]);
+  const [cost, setCost] = useState(0);
+  const [isClicked, setIsClicked] = useState(false);
+const useUpdateCost = () => {
+   
 
   useEffect(() => {
-    if (categorySelected) {
-      setNumOwned(numOwned + 1);
+   
+    if (isClicked) {
       console.log(isClicked);
+      setNumOwned(numOwned + 1);
+      let newPurchased = purchasedItems[id] += 1;
+      let updateValues = (`${categorySelected}: ${newPurchased}`)
+     setCost(updateValues);
+    
+     if(categorySelected === Object.keys(purchasedItems))
+     {
+  alert("good")
+        
     }
-  }, [isClicked]);
+
+}
+  }, [handleClick]);
+}
+useUpdateCost();
+
+  const handleChange = (event) => {
+    handleClick(event.currentTarget.id);
+   
+    setIsClicked(true);
+    setCategorySelected(event.currentTarget.id);
+    const itemsName = Object.keys(purchasedItems);
+    console.log(itemsName);
+
+    if (cookieCount > 0) {
+      setCookieCount(cookieCount - event.currentTarget.value);
+    } else {
+      return alert("You are out of cookies!");
+    }
+  };
 
   const fullList = items.map((it) => {
-    return (
-      <Markup>
-        <List>
-        
-          <ClickedItem
-            id={it.id}
-            key={it.id}
-            value={it.cost}
-            purchasedItems={purchasedItems}
-            setCookieCount ={setCookieCount}
-            cookieCount={cookieCount}
-          >
-           <Items key={it.id}>
-              <Div>
-                <Title>{it.name}</Title>
-                <Description>
-                  Cost: {it.cost} cookie(s). Produces {it.value} cookies/second.
-                </Description>
-              </Div>
-           
-            </Items>
+    if (it.id === id) {
+      return (
+        <Markup>
+          <List>
+            <ClickedItem
+              id={it.id}
+              key={it.id}
+              value={it.cost}
+              onClick={handleChange}
+            >
+              <Items key={it.id}>
+                <Div>
+                  <Title>{it.name}</Title>
+                  <Description>
+                    Cost: {it.cost} cookie(s). Produces {it.value}{" "}
+                    cookies/second.
+                  </Description>
+                </Div>
+                <Total key={it.id}>{numOwned}</Total>
+              </Items>
             </ClickedItem>
-        </List>
-      </Markup>
-    );
+          </List>
+        </Markup>
+      );
+    }
   });
   return fullList;
 };
@@ -69,6 +102,17 @@ const Title = styled.h1``;
 const Description = styled.p`
   display: flex;
   flex-direction: column;
+`;
+const ClickedItem = styled.button`
+  color: white;
+  background-color: #222;
+  width: 350px;
+  border: none;
+`;
+const Total = styled.h2`
+  margin-top: 30px;
+  display: flex;
+  padding-left: 20px;
 `;
 
 export default Item;

@@ -12,19 +12,38 @@ const items = [
 ];
 
 const Game = () => {
-const [cookieCount, setCookieCount] = useState(1000);
+const [cookieCount, setCookieCount] = useState(100000);
 const [time, setTime] = useState(0);
 const [cursorCount, setCursorCount] = useState(0);
-  const purchasedItems = {
-    cursor: 0,
-    grandma: 0,
-    farm: 0,
-  };
+const [numOwned, setNumOwned] = useState(0);
+  const [purchasedItems,setPurchasedItems] = useState({
+    cursor: 1,
+    grandma: 2,
+    farm: 3,
+  });
 
-  const handleClick = () => {
+  const newCookieCount = () => {
+    if (cookieCount >= 0) {
+
+    
     setCookieCount(cookieCount + 1)
-
+    }
+    else {
+ 
+        return alert("You are out of cookies!");
+      
+    
+    }
   }
+
+  const handleClick = (cookies) => {
+console.log(cookies)
+  }
+    
+    
+
+  
+  console.log(purchasedItems)
   return (
     <Wrapper>
       <GameArea>
@@ -34,7 +53,7 @@ const [cursorCount, setCursorCount] = useState(0);
           {/* TODO: Calcuate the cookies per second and show it here: */}
           <strong>{time}</strong> cookies per second
         </Indicator>
-        <Button onClick = { handleClick } >
+        <Button onClick = { newCookieCount } >
           <Cookie src={cookieSrc} />
         </Button>
       </GameArea>
@@ -42,13 +61,34 @@ const [cursorCount, setCursorCount] = useState(0);
       <ItemArea>
         <SectionTitle>Items:</SectionTitle>
         <Item 
+        id= "cursor"
+        key="cursor"
+        setPurchasedItems={setPurchasedItems}
         purchasedItems = {purchasedItems}
         items = {items}
         setCookieCount= {setCookieCount}
         cookieCount = {cookieCount}
         handleClick = {handleClick}
         />
-        {/* TODO: Add <Item> instances here, 1 for each item type. */}
+          <Item 
+          id="grandma"
+          key="grandma"
+        purchasedItems = {purchasedItems}
+        items = {items}
+        setCookieCount= {setCookieCount}
+        cookieCount = {cookieCount}
+        handleClick = {handleClick}
+        />
+          <Item 
+              id="farm"
+              key="farm"
+        purchasedItems = {purchasedItems}
+        items = {items}
+        setCookieCount= {setCookieCount}
+        cookieCount = {cookieCount}
+        handleClick = {handleClick}
+        />
+
       </ItemArea>
       <HomeLink to="/">Return home</HomeLink>
     </Wrapper>
