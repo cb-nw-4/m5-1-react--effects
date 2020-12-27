@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import useInterval from "../hooks/use-interval.hook";
 import { Link } from "react-router-dom";
 import Item from "./Item";
 
@@ -14,26 +15,39 @@ const items = [
 const Game = () => {
   const [cookieCount, setCookieCount] = useState(100000);
   const [time, setTime] = useState(0);
+  const [cookieCost, setCookieCost] = useState(0);
   const [cursorCount, setCursorCount] = useState(0);
 
   const [purchasedItems, setPurchasedItems] = useState({
-    cursor: 1,
-    grandma: 2,
-    farm: 3,
+    cursor: 0,
+    grandma: 0,
+    farm: 0,
   });
 
+  const calculateCookiesPerTick = (cookiesPerTick) => {
+    setTime(time + cookiesPerTick);
+    console.log(cookiesPerTick);
+  };
+  useInterval(() => {
+    const numOfGeneratedCookies = calculateCookiesPerTick(purchasedItems);
+  
+    // Add this number of cookies to the total
+  }, 100000);
+
   const useCookieCount = () => {
-    if (cookieCount >= 0) {
+    if (cookieCount > 0) {
       setCookieCount(cookieCount + 1);
     } else {
       return alert("You are out of cookies!");
     }
   };
 
-  const handleClick = (cookies) => {
-    console.log(cookies);
+  const handleClick = (key, value) => {
+    setCursorCount(key);
+    console.log(value);
   };
-
+  console.log(cookieCost);
+  console.log(time);
   console.log(purchasedItems);
   return (
     <Wrapper>
@@ -52,31 +66,37 @@ const Game = () => {
         <SectionTitle>Items:</SectionTitle>
         <Item
           id="cursor"
-          key="cursor"
           setPurchasedItems={setPurchasedItems}
           purchasedItems={purchasedItems}
           items={items}
           setCookieCount={setCookieCount}
           cookieCount={cookieCount}
+          calculateCookiesPerTick={calculateCookiesPerTick}
           handleClick={handleClick}
+          cookieCost={cookieCost}
+          setCookieCost={setCookieCost}
         />
         <Item
           id="grandma"
-          key="grandma"
           purchasedItems={purchasedItems}
           items={items}
           setCookieCount={setCookieCount}
           cookieCount={cookieCount}
+          calculateCookiesPerTick={calculateCookiesPerTick}
           handleClick={handleClick}
+          cookieCost={cookieCost}
+          setCookieCost={setCookieCost}
         />
         <Item
           id="farm"
-          key="farm"
           purchasedItems={purchasedItems}
           items={items}
           setCookieCount={setCookieCount}
           cookieCount={cookieCount}
+          calculateCookiesPerTick={calculateCookiesPerTick}
           handleClick={handleClick}
+          cookieCost={cookieCost}
+          setCookieCost={setCookieCost}
         />
       </ItemArea>
       <HomeLink to="/">Return home</HomeLink>
