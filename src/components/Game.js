@@ -1,40 +1,96 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import Item from "./Item";
+import useKeyDown from "./useKeyDown";
+import useDocumentTitle from "./useDocumentTitle";
+import useInterval from "./../hooks/use-interval.hook";
 
 import cookieSrc from "../cookie.svg";
 
-const items = [
-  { id: "cursor", name: "Cursor", cost: 10, value: 1 },
-  { id: "grandma", name: "Grandma", cost: 100, value: 10 },
-  { id: "farm", name: "Farm", cost: 1000, value: 80 },
-];
 
 const Game = () => {
-  // TODO: Replace this with React state!
-  const numCookies = 100;
-  const purchasedItems = {
-    cursor: 0,
-    grandma: 0,
-    farm: 0,
+  const [numCookies, setNumCookies] = useState(100)
+  const [purchasedItems, setPurchasedItems] = useState({cursor: 0, grandma: 0,farm: 0, MegaCursor: 0})
+
+  const items = [
+    { id: "cursor", name: "Cursor", cost: (10 + (purchasedItems.cursor ** 2)), value: 1 },
+    { id: "grandma", name: "Grandma", cost: (100 + (purchasedItems.grandma ** 2)), value: 10 },
+    { id: "farm", name: "Farm", cost: (1000 + (purchasedItems.farm ** 2)), value: 80 },
+    { id: "MegaCursor", name: "MegaCursor", cost: (25 + (purchasedItems.MegaCursor ** 2)), value: 0}
+  ];
+
+
+  const handleClick = (selectedItem) => {
+    if (numCookies < selectedItem.cost) {
+      window.alert("You can't afford this!")
+    } else {
+      setNumCookies(numCookies - selectedItem.cost);
+      let currentPurchasedItems = purchasedItems;
+      currentPurchasedItems[selectedItem.id] += 1;
+      setPurchasedItems(currentPurchasedItems);
+    }
   };
+
+  const handleMegaClick = () => {
+    setNumCookies(numCookies + (5 * purchasedItems.MegaCursor));
+  };
+
+  useKeyDown(32, (purchasedItems.MegaCursor === 0 ? handleClick : handleMegaClick));
+  useDocumentTitle(`${numCookies} cookies – Cookie Clicker Workshop`, 'Cookie Clicker Workshop');
+
+  const calculateCookiesPerTick = (purchasedItems) => {
+    let totalValue = 0;
+    items.forEach((item) => {
+      totalValue += (purchasedItems[item.id] * item.value)
+    })
+    return totalValue;
+  }  
+
+  useEffect(() => {
+    document.title = `${numCookies} cookies`;
+  }, [numCookies]);
+
+  useInterval(() => {
+    const numOfGeneratedCookies = calculateCookiesPerTick(purchasedItems);
+    setNumCookies(numCookies + numOfGeneratedCookies);
+  }, 1000);
+
+  let focusOnMount;
 
   return (
     <Wrapper>
       <GameArea>
         <Indicator>
           <Total>{numCookies} cookies</Total>
-          {/* TODO: Calcuate the cookies per second and show it here: */}
-          <strong>0</strong> cookies per second
+          <strong>{calculateCookiesPerTick(purchasedItems)}</strong> cookies per second
         </Indicator>
-        <Button>
+          <Button onClick={() => (purchasedItems.MegaCursor === 0 ? setNumCookies(numCookies + 1) : setNumCookies((numCookies + (5 * purchasedItems.MegaCursor))))}>
           <Cookie src={cookieSrc} />
         </Button>
       </GameArea>
 
       <ItemArea>
         <SectionTitle>Items:</SectionTitle>
-        {/* TODO: Add <Item> instances here, 1 for each item type. */}
+        {items.map((item, index) => {
+          if (index === 0) {
+            focusOnMount = true;
+          } else {
+            focusOnMount = false;
+          };
+          return (
+          <Button onClick={() => handleClick(item)}>
+            <Item 
+              name={item.name} 
+              cost={item.cost} 
+              value={item.value} 
+              count={purchasedItems[item.id]} 
+              index={index}
+              id={item.id}
+              focusOnMount={focusOnMount}>{item.name}</Item>
+            </Button>
+          )
+        })}        
       </ItemArea>
       <HomeLink to="/">Return home</HomeLink>
     </Wrapper>
