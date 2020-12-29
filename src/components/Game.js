@@ -24,6 +24,15 @@ const Game = () => {
   const [cookiesPerSecState, setCookiesPerSecState] = useState(0);
   const [numCookies, setNumCookies] = useState(10000);
   const [purchasedItems, setPurchasedItems] = useState(initialValues);
+  const [isFirstItem, setIsFirstItem] = useState(null);
+
+  const handlePosition = (item) => {
+    if(items.indexOf(item) === 0){
+      setIsFirstItem(true);
+    } else {
+      setIsFirstItem(false);
+    }
+  };
 
   const incrementCount = () => {
     setNumCookies(numCookies + 1);
@@ -32,15 +41,22 @@ const Game = () => {
 
   const handleClick = (item) => {
     let itemId = item.id
-    // console.log(itemId);
-    // console.log(purchasedItems[itemId],'ITEMS');
-    // console.log(purchasedItems.itemId)
+
     if(numCookies >= item.cost){
       setNumCookies(numCookies - item.cost);
       setPurchasedItems({...purchasedItems, [itemId]:purchasedItems[itemId] + 1});
     } else {
       window.alert('Not enough cookies');
     }
+
+    // if(items.indexOf(item) === 0) {
+    //   // setIsFirstItem(true);
+    //   isFirstItem = true;
+    // } else {
+    //   // setIsFirstItem(false);
+    //   isFirstItem = false;
+    // }
+    // console.log(isFirstItem);
   };
 
   //Passive Cookie Generation
@@ -123,12 +139,19 @@ const Game = () => {
       <ItemArea>
         <SectionTitle>Items:</SectionTitle>
         {items.map((item) => {
+          // let isFirst = false;
+          // if(items.indexOf(item) === 0){
+          //   isFirst = true;
+          // }
+
           return <Item 
           name={item.name}
           cost={item.cost}
           value={item.value} 
           numOwned={purchasedItems[item.id]} 
           handleClick={() => {handleClick(item)}}
+          // isFirst={isFirst}
+          itemIndex={items.indexOf(item)}
           />
         })}
       </ItemArea>

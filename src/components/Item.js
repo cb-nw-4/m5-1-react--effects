@@ -1,9 +1,12 @@
 import React from "react";
 import styled from "styled-components";
 
-const Item = ({ name, cost, value, numOwned, handleClick }) => {
+const Item = ({ name, cost, value, numOwned, handleClick, itemIndex }) => {
+    
+    console.log(itemIndex);
+    //use Ref and inside of it, use and if statement with the itemIndex to get first one  [0]
     return (
-    <Button onClick={handleClick}>
+    <Button onClick={handleClick}> 
         <div>
             <Name>{name}</Name>
             <Description>Cost: {cost} cookie(s). Produces: {value} cookies/second.</Description>
