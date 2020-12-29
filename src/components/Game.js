@@ -14,6 +14,10 @@ const items = [
   { id: "farm", name: "Farm", cost: 1000, value: 80 },
 ];
 
+const useKeyDown = () => {
+
+}
+
 const Game = () => {
   const [numCookies, setNumCookies] = useState(100);
   const [purchasedItems, setPurchasedItems] = useState({
@@ -22,13 +26,19 @@ const Game = () => {
     farm: 0,
   });
 
-  useEffect(() => {
-    document.title = numCookies + ' - Cookie Clicker';
-  }, [numCookies]);
+  const useDocumentTitle = (title, fallBackTitle) => {
+    useEffect(() => {
+      document.title = numCookies + title;
+  
+      return () => {
+        document.title = fallBackTitle;
+      }
+    }, [numCookies]);
+  }
 
   const handleKeyDown = (event) => {
     if (event.code === 'Space') {
-      setNumCookies(numCookies + 1);
+      handleCookieClick();
     }
   }
 
@@ -101,6 +111,8 @@ const Game = () => {
 
     return totalValue;
   }
+
+  useDocumentTitle(' - Cookie Clicker', 'Cookie Clicker');
 
   return (
     <Wrapper>
