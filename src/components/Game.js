@@ -5,6 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import Item from './Item';
 import useInterval from '../hooks/use-interval.hook';
+import useKeydown from '../hooks/useKeydown';
 
 import cookieSrc from "../cookie.svg";
 
@@ -13,10 +14,6 @@ const items = [
   { id: "grandma", name: "Grandma", cost: 100, value: 10 },
   { id: "farm", name: "Farm", cost: 1000, value: 80 },
 ];
-
-const useKeyDown = () => {
-
-}
 
 const Game = () => {
   const [numCookies, setNumCookies] = useState(100);
@@ -36,11 +33,11 @@ const Game = () => {
     }, [numCookies]);
   }
 
-  const handleKeyDown = (event) => {
-    if (event.code === 'Space') {
-      handleCookieClick();
-    }
-  }
+  // const handleKeyDown = (event) => {
+  //   if (event.code === 'Space') {
+  //     handleCookieClick();
+  //   }
+  // }
 
   // Prevent the default action of the spacebar registering a click event
   // on the cookie if it has focus.
@@ -49,13 +46,13 @@ const Game = () => {
   //   event.preventDefault();
   // }
 
-  useEffect(() => {
-    window.addEventListener('keydown', handleKeyDown);
+  // useEffect(() => {
+  //   window.addEventListener('keydown', handleKeyDown);
 
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-    }
-  }, [handleKeyDown]);
+  //   return () => {
+  //     window.removeEventListener('keydown', handleKeyDown);
+  //   }
+  // }, [handleKeyDown]);
 
   const handleItemClick = (event) => {
     const item = items.find(item => item.id === event.currentTarget.id);
@@ -113,6 +110,7 @@ const Game = () => {
   }
 
   useDocumentTitle(' - Cookie Clicker', 'Cookie Clicker');
+  useKeydown('Space', handleCookieClick);
 
   return (
     <Wrapper>
