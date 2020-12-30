@@ -58,47 +58,25 @@ const Game = () => {
   // }, [handleKeyDown]);
 
   const handleItemClick = (event) => {
-    const item = items.find(item => item.id === event.currentTarget.id);
+    const index = items.findIndex(item => item.id === event.currentTarget.id);
+    const item = items[index];
 
-    switch (item.id) {
-      case 'cursor':
-        if (numCookies >= item.cost) {
-          setNumCookies(numCookies - item.cost);
-          setPurchasedItems({ ...purchasedItems, [item.id]: purchasedItems[item.id] + 1 });
-        } else {
-          window.alert(`You can't afford a ${item.name}`);
-        }
+    if (numCookies >= item.cost) {
+      if (item.id === 'megacursor') {
+        setCookiesPerClick(cookiesPerClick + item.value);
+      }
 
-        break;
-      case 'grandma':
-        if (numCookies >= item.cost) {
-          setNumCookies(numCookies - item.cost);
-          setPurchasedItems({ ...purchasedItems, [item.id]: purchasedItems[item.id] + 1 });
-        } else {
-          window.alert(`You can't afford a ${item.name}`);
-        }
-  
-        break;
-      case 'farm':
-        if (numCookies >= item.cost) {
-          setNumCookies(numCookies - item.cost);
-          setPurchasedItems({ ...purchasedItems, [item.id]: purchasedItems[item.id] + 1 });
-        } else {
-          window.alert(`You can't afford a ${item.name}`);
-        }
-  
-        break;
-      case 'megacursor':
-        if (numCookies >= item.cost) {
-          setNumCookies(numCookies - item.cost);
-          setPurchasedItems({ ...purchasedItems, [item.id]: purchasedItems[item.id] + 1 });
-          setCookiesPerClick(cookiesPerClick + item.value);
-        } else {
-          window.alert(`You can't afford a ${item.name}`);
-        }
-    
-        break;
+      setNumCookies(numCookies - item.cost);
+      setPurchasedItems({ ...purchasedItems, [item.id]: purchasedItems[item.id] + 1 });
+    } else {
+      window.alert(`You can't afford a ${item.name}`);
     }
+
+    // Increase pricing a random percentage from 1 to 10
+    const percentInc = Math.floor((Math.random() * 10) + 1) / 100 + 1;
+    const newCost = Math.floor(percentInc * item.cost);
+
+    items[index].cost = newCost;
   }
 
   const handleCookieClick = () => {
