@@ -10,17 +10,20 @@ import useKeydown from '../hooks/useKeydown';
 import cookieSrc from "../cookie.svg";
 
 const items = [
-  { id: "cursor", name: "Cursor", cost: 10, value: 1 },
-  { id: "grandma", name: "Grandma", cost: 100, value: 10 },
-  { id: "farm", name: "Farm", cost: 1000, value: 80 },
+  { id: "cursor", name: "Cursor", cost: 10, value: 1, type: 'tick' },
+  { id: "grandma", name: "Grandma", cost: 100, value: 10, type: 'tick' },
+  { id: "farm", name: "Farm", cost: 1000, value: 80, type: 'tick' },
+  { id: 'megacursor', name: 'megaCursor', cost: 5000, value: 10, type: 'click' }
 ];
 
 const Game = () => {
   const [numCookies, setNumCookies] = useState(100);
+  const [cookiesPerClick, setCookiesPerClick] = useState(1);
   const [purchasedItems, setPurchasedItems] = useState({
     cursor: 0,
     grandma: 0,
     farm: 0,
+    megacursor: 0
   });
 
   const useDocumentTitle = (title, fallBackTitle) => {
@@ -85,11 +88,21 @@ const Game = () => {
         }
   
         break;
+      case 'megacursor':
+        if (numCookies >= item.cost) {
+          setNumCookies(numCookies - item.cost);
+          setPurchasedItems({ ...purchasedItems, [item.id]: purchasedItems[item.id] + 1 });
+          setCookiesPerClick(cookiesPerClick + item.value);
+        } else {
+          window.alert(`You can't afford a ${item.name}`);
+        }
+    
+        break;
     }
   }
 
   const handleCookieClick = () => {
-    setNumCookies(numCookies + 1);
+    setNumCookies(numCookies + cookiesPerClick);
   }
 
   useInterval(() => {
@@ -117,7 +130,7 @@ const Game = () => {
       <GameArea>
         <Indicator>
           <Total>{numCookies} cookies</Total>
-          <strong>{calculateCookiesPerTick(purchasedItems)}</strong> cookies per second
+          <strong>{calculateCookiesPerTick(purchasedItems)}</strong> cookies per second, <strong>{cookiesPerClick}</strong> cookie(s) per click
         </Indicator>
         <Button onClick={handleCookieClick}>
           <Cookie src={cookieSrc} />
@@ -133,6 +146,7 @@ const Game = () => {
           name={item.name}
           cost={item.cost}
           value={item.value}
+          type={item.type}
           numOwned={purchasedItems[item.id]}
           handleItemClick={handleItemClick} />)}
       </ItemArea>
@@ -176,7 +190,7 @@ const SectionTitle = styled.h3`
 
 const Indicator = styled.div`
   position: absolute;
-  width: 250px;
+  width: 450px;
   top: 0;
   left: 0;
   right: 0;

@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from "react";
 import styled from "styled-components";
 
-const Item = ({ firstItem, id, name, cost, value, numOwned, handleItemClick }) => {
+const Item = ({ firstItem, id, name, cost, value, type, numOwned, handleItemClick }) => {
   const itemButton = useRef(null);
 
   useEffect(() => {
@@ -14,7 +14,7 @@ const Item = ({ firstItem, id, name, cost, value, numOwned, handleItemClick }) =
     <Button id={id} onClick={handleItemClick} ref={itemButton}>
       <div>
         <Name>{name}</Name>
-        <Detail>Cost: {cost} cookie(s). Produces {value} cookies/second.</Detail>
+        <Detail>Cost: {cost} cookie(s). Produces {value} {type === 'tick' ? 'cookies/second.' : 'cookies/click'}</Detail>
       </div>
       <Owned>
         {numOwned}
