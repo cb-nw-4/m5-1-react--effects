@@ -8,7 +8,7 @@ const Item = ({ firstItem, id, name, cost, value, type, numOwned, handleItemClic
     if (firstItem) {
       itemButton.current.focus();
     }
-  }, []);
+  }, [firstItem]);
   
   return (
     <Button id={id} onClick={handleItemClick} ref={itemButton}>

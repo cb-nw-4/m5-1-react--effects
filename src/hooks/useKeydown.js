@@ -1,11 +1,11 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 
 const useKeydown = (code, callback) => {
-  const onKeydown = (event) => {
+  const onKeydown = useCallback((event) => {
     if (event.code === code) { 
       callback();
     }
-  }
+  }, [code, callback])
 
   useEffect(() => {
     window.addEventListener('keydown', onKeydown)

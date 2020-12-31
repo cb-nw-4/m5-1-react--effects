@@ -36,26 +36,12 @@ const Game = () => {
     }, [numCookies]);
   }
 
-  // const handleKeyDown = (event) => {
-  //   if (event.code === 'Space') {
-  //     handleCookieClick();
-  //   }
-  // }
-
   // Prevent the default action of the spacebar registering a click event
   // on the cookie if it has focus.
   // const handleKeyUp = (event) => {
   //   console.log(event.current.currentTarget);
   //   event.preventDefault();
   // }
-
-  // useEffect(() => {
-  //   window.addEventListener('keydown', handleKeyDown);
-
-  //   return () => {
-  //     window.removeEventListener('keydown', handleKeyDown);
-  //   }
-  // }, [handleKeyDown]);
 
   const handleItemClick = (event) => {
     const index = items.findIndex(item => item.id === event.currentTarget.id);
@@ -94,7 +80,10 @@ const Game = () => {
 
     Object.keys(purchasedItems).forEach(key => {
       const item = items.find(item => item.id === key);
-      totalValue += purchasedItems[key] * item.value;
+      
+      if (item.type === 'tick') {
+        totalValue += purchasedItems[key] * item.value;
+      }
     });
 
     return totalValue;
@@ -145,7 +134,8 @@ const GameArea = styled.div`
 const Button = styled.button`
   border: none;
   background: transparent;
-  cursor: pointer;
+  /* cursor: pointer; */
+  cursor: url('../cookie-monster-cursor.png'), pointer;
 `;
 
 const Cookie = styled.img`
