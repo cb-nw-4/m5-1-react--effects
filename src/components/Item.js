@@ -1,6 +1,8 @@
 import React, { useRef, useEffect } from "react";
 import styled from "styled-components";
 
+import cookieMonster from '../monster50.png';
+
 const Item = ({ firstItem, id, name, cost, value, type, numOwned, handleItemClick }) => {
   const itemButton = useRef(null);
 
@@ -34,7 +36,7 @@ const Button = styled.button`
   border-bottom: 1px solid gray;
   padding: 20px 20px 20px 0;
   color: white;
-  cursor: pointer;
+  cursor: url(${cookieMonster}), pointer;
 `;
 
 const Name = styled.span`

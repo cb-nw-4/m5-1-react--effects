@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { v4 as uuidv4 } from 'uuid';
@@ -8,6 +8,7 @@ import useInterval from '../hooks/use-interval.hook';
 import useKeydown from '../hooks/useKeydown';
 
 import cookieSrc from "../cookie.svg";
+import cookieMonster from '../monster50.png';
 
 const items = [
   { id: "cursor", name: "Cursor", cost: 10, value: 1, type: 'tick' },
@@ -135,7 +136,7 @@ const Button = styled.button`
   border: none;
   background: transparent;
   /* cursor: pointer; */
-  cursor: url('../cookie-monster-cursor.png'), pointer;
+  cursor: url(${cookieMonster}), pointer;
 `;
 
 const Cookie = styled.img`
