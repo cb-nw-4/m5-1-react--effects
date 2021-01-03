@@ -10,7 +10,6 @@ const Item = ({ name, cost, value, numOwned, handleClick, itemIndex }) => {
             firstIndexRef.current.focus();
         }
     }, [])
-    //use Ref and inside of it, use and if statement with the itemIndex to get first one  [0]
     return (
     <Button onClick={handleClick} ref={firstIndexRef}> 
         <div>

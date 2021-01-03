@@ -5,6 +5,7 @@ import Item from './Item';
 import useInterval from '../../src/hooks/use-interval.hook';
 // import useInterval from 'src/hooks/use-interval.hook';
 // import { Helmet } from 'react-helmet';
+import useKeydown from '../../src/hooks/custom-hooks'
 
 import cookieSrc from "../cookie.svg";
 
@@ -24,15 +25,11 @@ const Game = () => {
   const [cookiesPerSecState, setCookiesPerSecState] = useState(0);
   const [numCookies, setNumCookies] = useState(10000);
   const [purchasedItems, setPurchasedItems] = useState(initialValues);
-  const [isFirstItem, setIsFirstItem] = useState(null);
 
-  const handlePosition = (item) => {
-    if(items.indexOf(item) === 0){
-      setIsFirstItem(true);
-    } else {
-      setIsFirstItem(false);
-    }
-  };
+  // const { keyPressHandler } = useKeydown();
+  // keyPressHandler('Space', incrementCount);
+  useKeydown('Space', incrementCount);
+
 
   const incrementCount = () => {
     setNumCookies(numCookies + 1);
@@ -48,15 +45,6 @@ const Game = () => {
     } else {
       window.alert('Not enough cookies');
     }
-
-    // if(items.indexOf(item) === 0) {
-    //   // setIsFirstItem(true);
-    //   isFirstItem = true;
-    // } else {
-    //   // setIsFirstItem(false);
-    //   isFirstItem = false;
-    // }
-    // console.log(isFirstItem);
   };
 
   //Passive Cookie Generation
@@ -89,27 +77,23 @@ const Game = () => {
   }, [numCookies]);
 
   //Exercise 5: Using the "space" Key
-  const keyPressHandler = (ev) => {
-    if (ev.code === "Space") {
-      incrementCount();
-      console.log('Key Pressed');
-    }
-  }
-  useEffect(() => {
-    console.log('Key press effect')
-    // const keyPressHandler = (ev) => {
-    //   if (ev.code === "Space") {
-    //     incrementCount();
-    //     console.log('Key Pressed');
-    //   }
-    // }
-    window.addEventListener('keydown', keyPressHandler);
+  // const keyPressHandler = (ev) => {
+  //   if (ev.code === "Space") {
+  //     incrementCount();
+  //     console.log('Key Pressed');
+  //   }
+  // }
+  // useEffect(() => {
+  //   console.log('Key press effect')
+  //   window.addEventListener('keydown', keyPressHandler);
 
-    return () => {
-      window.removeEventListener('keydown', keyPressHandler);
-    }
-  }, [keyPressHandler]);
+  //   return () => {
+  //     window.removeEventListener('keydown', keyPressHandler);
+  //   }
+  // }, [keyPressHandler]);
 
+
+  // CALLBACK EXAMPLE
   // const handleGetCookie = 
   //   useCallback(() => {
   //     setNumCookies(numCookies + 1);
@@ -128,7 +112,6 @@ const Game = () => {
       <GameArea>
         <Indicator numCookies={numCookies}>
           <Total>{numCookies} cookies</Total>
-          {/* TODO: Calcuate the cookies per second and show it here: */}
           <strong>{cookiesPerSecState}</strong> cookies per second
         </Indicator>
         <Button>
@@ -139,18 +122,12 @@ const Game = () => {
       <ItemArea>
         <SectionTitle>Items:</SectionTitle>
         {items.map((item) => {
-          // let isFirst = false;
-          // if(items.indexOf(item) === 0){
-          //   isFirst = true;
-          // }
-
           return <Item 
           name={item.name}
           cost={item.cost}
           value={item.value} 
           numOwned={purchasedItems[item.id]} 
           handleClick={() => {handleClick(item)}}
-          // isFirst={isFirst}
           itemIndex={items.indexOf(item)}
           />
         })}
