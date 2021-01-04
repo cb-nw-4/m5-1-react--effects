@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 const Item = ({ name, cost, value, numOwned, handleClick, itemIndex }) => {
     const firstIndexRef = useRef(null);
-    console.log(itemIndex, name);
+    // console.log(itemIndex, name);
 
     useEffect(() => {
         if(itemIndex === 0){

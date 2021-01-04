@@ -26,16 +26,12 @@ const Game = () => {
   const [numCookies, setNumCookies] = useState(10000);
   const [purchasedItems, setPurchasedItems] = useState(initialValues);
 
-  // const { keyPressHandler } = useKeydown();
-  // keyPressHandler('Space', incrementCount);
-  useKeydown('Space', incrementCount);
-
-
   const incrementCount = () => {
     setNumCookies(numCookies + 1);
   };
-  //purchasedItems COUNT
+  useKeydown('Space', incrementCount);
 
+  //purchasedItems COUNT
   const handleClick = (item) => {
     let itemId = item.id
 
@@ -59,8 +55,6 @@ const Game = () => {
 
       totalCookiesPerSec  += cookiesPerSec;
     })
-    // console.log(totalCookiesPerSec, 'TOTAL')
-    // setCookiesPerSecState(totalCookiesPerSec);
     return totalCookiesPerSec;
   }
   useInterval(() => {

@@ -1,19 +1,15 @@
-import React, { useState, useEffect } from "react"; 
+import { useState, useEffect } from "react"; 
 
-function useKeydown(code, callback) {
-    // const [isKeyPressed, setIsKeyPressed] = useState(false)
-
+export default function useKeydown(code, callback) {
     const keyPressHandler = (ev) => {
+
         if (ev.code === code) {
-            // incrementCount();
             callback();
-            // setIsKeyPressed(true);
-            console.log('Key Pressed');
+            console.log('Key Pressed:', code);
         }
     }
 
     useEffect(() => {
-        console.log('Key press effect')
         window.addEventListener('keydown', keyPressHandler);
     
         return () => {
@@ -23,5 +19,3 @@ function useKeydown(code, callback) {
 
     return { keyPressHandler };
 }
-
-export default useKeydown;
