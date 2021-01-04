@@ -5,7 +5,7 @@ import Item from './Item';
 import useInterval from '../../src/hooks/use-interval.hook';
 // import useInterval from 'src/hooks/use-interval.hook';
 // import { Helmet } from 'react-helmet';
-import useKeydown from '../../src/hooks/custom-hooks'
+import { useKeydown, useDocumentTitle } from '../../src/hooks/custom-hooks'
 
 import cookieSrc from "../cookie.svg";
 
@@ -66,9 +66,10 @@ const Game = () => {
   }, 1000);
 
   //Exercise 4: Updateting the Tab Title
-  useEffect(() => {
-    document.title = `${numCookies} cookies - Cookie Clicker`;
-  }, [numCookies]);
+  // useEffect(() => {
+  //   document.title = `${numCookies} cookies - Cookie Clicker`;
+  // }, [numCookies]);
+  useDocumentTitle({numCookies}, 'Cookie Clicker');
 
   //Exercise 5: Using the "space" Key
   // const keyPressHandler = (ev) => {

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"; 
 
-export default function useKeydown(code, callback) {
+function useKeydown(code, callback) {
     const keyPressHandler = (ev) => {
 
         if (ev.code === code) {
@@ -19,3 +19,14 @@ export default function useKeydown(code, callback) {
 
     return { keyPressHandler };
 }
+
+function useDocumentTitle(title, fallbackTitle) {
+    useEffect(() => {
+        document.title = `${Object.values(title)} cookies - Cookie Clicker`;
+    }, [title]);
+    return () => {
+        document.title = `${fallbackTitle}`;
+    }
+}
+
+export {useKeydown, useDocumentTitle};
