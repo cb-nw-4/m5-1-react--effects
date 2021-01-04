@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { v4 as uuidv4 } from 'uuid';
@@ -6,9 +6,10 @@ import { v4 as uuidv4 } from 'uuid';
 import Item from './Item';
 import useInterval from '../hooks/use-interval.hook';
 import useKeydown from '../hooks/useKeydown';
+import useDocumentTitle from '../hooks/useDocumentTitle';
 
 import cookieSrc from "../cookie.svg";
-import cookieMonster from '../monster50.png';
+import cookieMonster from '../monster32.png';
 
 const items = [
   { id: "cursor", name: "Cursor", cost: 10, value: 1, type: 'tick' },
@@ -26,16 +27,6 @@ const Game = () => {
     farm: 0,
     megacursor: 0
   });
-
-  const useDocumentTitle = (title, fallBackTitle) => {
-    useEffect(() => {
-      document.title = numCookies + title;
-  
-      return () => {
-        document.title = fallBackTitle;
-      }
-    }, [numCookies]);
-  }
 
   // Prevent the default action of the spacebar registering a click event
   // on the cookie if it has focus.
@@ -90,7 +81,7 @@ const Game = () => {
     return totalValue;
   }
 
-  useDocumentTitle(' - Cookie Clicker', 'Cookie Clicker');
+  useDocumentTitle(numCookies + ' - Cookie Clicker', 'Cookie Clicker');
   useKeydown('Space', handleCookieClick);
 
   return (
@@ -127,15 +118,16 @@ const Wrapper = styled.div`
   display: flex;
   height: 100vh;
 `;
+
 const GameArea = styled.div`
   flex: 1;
   display: grid;
   place-items: center;
 `;
+
 const Button = styled.button`
   border: none;
   background: transparent;
-  /* cursor: pointer; */
   cursor: url(${cookieMonster}), pointer;
 `;
 

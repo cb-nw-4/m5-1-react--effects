@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from "react";
 import styled from "styled-components";
 
-import cookieMonster from '../monster50.png';
+import cookieMonster from '../monster32.png';
 
 const Item = ({ firstItem, id, name, cost, value, type, numOwned, handleItemClick }) => {
   const itemButton = useRef(null);
