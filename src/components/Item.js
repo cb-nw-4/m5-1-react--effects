@@ -1,32 +1,38 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 
 const Item = ({ items, numOwned, handleClick }) => {
+
+const firstRef = useRef();
+
+useEffect(() => {
+    console.log(firstRef.current )
+    firstRef.current.focus();
+     
+   
+  }, []);
+
   return (
     <Markup>
-      {items.map((item) => {
+      {items.map((item, index) => {
         return (
-         
           <ClickedItem
             id={item.id}
             key={item.id}
-            value={item.cost}
+          
+            ref={index == 0 ? firstRef  : null }
             onClick={() => handleClick(item)}
           >
-               
             <Items key={item.id}>
               <Title>{item.name}</Title>
               <Description>
                 Cost: {item.cost} cookie(s). Produces {item.value}{" "}
                 cookies/second.
               </Description>
-              </Items>
-       
-                <Total key={item.id}>{numOwned[item.id]}</Total>
-            
-         
-          </ClickedItem>
+            </Items>
 
+            <Total key={item.id}>{numOwned[item.id]}</Total>
+          </ClickedItem>
         );
       })}
     </Markup>
@@ -46,21 +52,18 @@ const ClickedItem = styled.button`
 
 const Markup = styled.div`
   margin-top: 1rem;
-
 `;
 
 const Items = styled.div`
-padding:20px;
+  padding: 20px;
 `;
 const Title = styled.h1`
-padding:10px;
+  padding: 10px;
 `;
 const Description = styled.p``;
 
 const Total = styled.h2`
-
-margin-top:30px;
-
+  margin-top: 30px;
 `;
 
 export default Item;

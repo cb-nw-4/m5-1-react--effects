@@ -11,20 +11,16 @@ const items = [
   { id: "grandma", name: "Grandma", cost: 100, value: 10 },
   { id: "farm", name: "Farm", cost: 1000, value: 80 },
 ];
-const calculateCookiesPerTick = (cookiesPerTick) => {
-  const amount =
-    cookiesPerTick.cursor * 1 +
-    cookiesPerTick.grandma * 10 +
-    cookiesPerTick.farm * 80;
-  return amount;
-};
+
 const Game = () => {
+ 
   const [cookieCount, setCookieCount] = useState(10000);
   const [purchasedItems, setPurchasedItems] = useState({
     cursor: 0,
     grandma: 0,
     farm: 0,
   });
+
 
   const handleClick = (item) => {
     console.log(item);
@@ -52,7 +48,13 @@ const Game = () => {
     setCookieCount(cookieCount + numOfGeneratedCookies);
   }, 1000);
 
-  const useCookieCount = () => {
+  const onKeyDown = (ev) => {
+    ev.preventDefault();
+    if (ev.code === "Space") {
+      handleCookieClick();
+    }
+  };
+  const handleCookieClick = () => {
     setCookieCount(cookieCount + 1);
   };
 
@@ -63,14 +65,22 @@ const Game = () => {
     };
   }, [cookieCount]);
 
+  useEffect(() => {
+    window.addEventListener("keydown", onKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", onKeyDown);
+    };
+  }, [onKeyDown]);
+
   return (
-    <Wrapper>
+    <Wrapper> 
       <GameArea>
         <Indicator>
           <Total>{cookieCount} cookies</Total>
           <strong>{calculateCookiesPerTick()}</strong> cookies per second
         </Indicator>
-        <Button onClick={useCookieCount}>
+        <Button  onClick={handleCookieClick}>
           <Cookie src={cookieSrc} />
         </Button>
       </GameArea>
