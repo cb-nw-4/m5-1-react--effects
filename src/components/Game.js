@@ -11,12 +11,17 @@ const items = [
   { id: "grandma", name: "Grandma", cost: 100, value: 10 },
   { id: "farm", name: "Farm", cost: 1000, value: 80 },
 ];
-
+const calculateCookiesPerTick = (cookiesPerTick) => {
+  const amount =
+    cookiesPerTick.cursor * 1 +
+    cookiesPerTick.grandma * 10 +
+    cookiesPerTick.farm * 80;
+  return amount;
+};
 const Game = () => {
-  const [cookieCount, setCookieCount] = useState(100000);
+  const [cookieCount, setCookieCount] = useState(10000);
   const [time, setTime] = useState(0);
   const [cookieCost, setCookieCost] = useState(0);
-  const [cursorCount, setCursorCount] = useState(0);
 
   const [purchasedItems, setPurchasedItems] = useState({
     cursor: 0,
@@ -24,15 +29,15 @@ const Game = () => {
     farm: 0,
   });
 
-  const calculateCookiesPerTick = (cookiesPerTick) => {
-    setTime(time + cookiesPerTick);
-    console.log(cookiesPerTick);
+  const handleClick = (cookieClick) => {
+    setTime(time + cookieClick);
+    console.log(cookieClick);
   };
+
   useInterval(() => {
     const numOfGeneratedCookies = calculateCookiesPerTick(purchasedItems);
-  
-    // Add this number of cookies to the total
-  }, 100000);
+    setCookieCount(cookieCount + numOfGeneratedCookies);
+  }, 1000);
 
   const useCookieCount = () => {
     if (cookieCount > 0) {
@@ -42,19 +47,19 @@ const Game = () => {
     }
   };
 
-  const handleClick = (key, value) => {
-    setCursorCount(key);
-    console.log(value);
-  };
-  console.log(cookieCost);
-  console.log(time);
-  console.log(purchasedItems);
+  useEffect(() => {
+    document.title = `${cookieCount} cookies - Cookie Clicker Workshop`;
+    return () => {
+      document.title = `Cookie Clicker Workshop`;
+    };
+  }, [cookieCount]);
+
   return (
     <Wrapper>
       <GameArea>
         <Indicator>
           <Total>{cookieCount} cookies</Total>
-          {/* TODO: Calcuate the cookies per second and show it here: */}
+     
           <strong>{time}</strong> cookies per second
         </Indicator>
         <Button onClick={useCookieCount}>
@@ -71,7 +76,6 @@ const Game = () => {
           items={items}
           setCookieCount={setCookieCount}
           cookieCount={cookieCount}
-          calculateCookiesPerTick={calculateCookiesPerTick}
           handleClick={handleClick}
           cookieCost={cookieCost}
           setCookieCost={setCookieCost}
@@ -82,7 +86,6 @@ const Game = () => {
           items={items}
           setCookieCount={setCookieCount}
           cookieCount={cookieCount}
-          calculateCookiesPerTick={calculateCookiesPerTick}
           handleClick={handleClick}
           cookieCost={cookieCost}
           setCookieCost={setCookieCost}
@@ -93,7 +96,6 @@ const Game = () => {
           items={items}
           setCookieCount={setCookieCount}
           cookieCount={cookieCount}
-          calculateCookiesPerTick={calculateCookiesPerTick}
           handleClick={handleClick}
           cookieCost={cookieCost}
           setCookieCost={setCookieCost}

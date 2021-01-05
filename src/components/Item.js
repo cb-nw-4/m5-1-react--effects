@@ -10,7 +10,7 @@ const Item = ({
   cookieCost,
   setCookieCost,
   setPurchasedItems,
-  calculateCookiesPerTick,
+ 
   id,
 }) => {
   const [numOwned, setNumOwned] = useState(0);
@@ -34,7 +34,7 @@ const Item = ({
         if (id == item.id && isClicked) {
             let cost = item.cost
           setCookieCost(cost);
-          calculateCookiesPerTick(item.value);
+          handleClick(item.value);
         }
       });
       return updatedValue;
@@ -43,7 +43,7 @@ const Item = ({
   useUpdateCost();
 
   const handleChange = (event) => {
-    handleClick(purchasedItems[id], event.currentTarget.value);
+
     setIsClicked(true);
     setCategorySelected(event.currentTarget.id);
 
