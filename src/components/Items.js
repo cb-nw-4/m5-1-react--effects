@@ -2,24 +2,26 @@ import React, { useEffect } from "react";
 import styled from "styled-components";
 
 
-const Item=({key, id, index, name, cost, value, purchasedItems, handleClick})=>{
-    // const ref = React.useRef(null);
+const Item=({id, index, name, cost, value, purchasedItems, handleClick})=>{
+    const ref = React.useRef(null);
 
-    // useEffect(() => {
-    //     if (index === 0) {
-    //     ref.current.focus();
-    //     }
-    // }, []);
+    useEffect(() => {
+        if (index === 0) {
+        ref.current.focus();
+        }
+    }, []);
     return (
         <>
             <Wrapper>
                 <Items 
+                id={id}
                 onClick={handleClick}
                 index={index}
+                ref={ref}
                 >
-                    <Name>{name}</Name>
-                    <Description>
-                        Cost: {cost} cookie(s). Produces {value} cookies/second
+                    <Name id={id}>{name}</Name>
+                    <Description id={id}>
+                        Cost: {cost} cookie(s). Produces {value} {(id==="megaCursor")?"cookies once":"cookie(s) per 3 seconds"}
                     </Description>
                 </Items>
                 <Purchased>
@@ -44,7 +46,7 @@ const Description=styled.p`
     color:gray;
 `;
 const Items=styled.button`
-    width:350px;
+    width:400px;
     padding:10px;
     border: none;
     background: transparent;

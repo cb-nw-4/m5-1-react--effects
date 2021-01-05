@@ -14,6 +14,7 @@ const items = [
   { id: "rose", name: "Rose", cost: 345, value: 30 },
   { id: "sophia", name: "Sophia", cost: 680, value: 55 },
   { id: "farm", name: "Farm", cost: 1000, value: 80 },
+  { id: "megaCursor", name: "megaCursor", cost:0, value: 200}
 ];
 
 const Game = () => {
@@ -27,6 +28,7 @@ const Game = () => {
     rose:0,
     sophia:0,
     farm: 0,
+    megaCursor: 0,
   });
   const [cookiesPerSec, setCookiesPerSec]=useState(0);
 
@@ -44,7 +46,7 @@ const Game = () => {
     // Add this number of cookies to the total
     setNumCookies(numCookies+numOfGeneratedCookies);
     setCookiesPerSec(numOfGeneratedCookies);
-  }, 1000);
+  }, 3000);
 
   const addCookie=()=>{
     return setNumCookies(numCookies+1); 
@@ -66,7 +68,7 @@ const Game = () => {
         <Indicator>
           <Total>{numCookies} cookies</Total>
           {/* TODO: Calcuate the cookies per second and show it here: */}
-          <strong>{cookiesPerSec}</strong> cookies per second
+          <strong>{cookiesPerSec}</strong> cookie(s) per 3 seconds
           <p>Get those cookies, get those cookies</p>
         </Indicator>
         <Button
@@ -82,16 +84,20 @@ const Game = () => {
           return(
             <>
               <Item 
-              key={el.id}
               id={el.id}
               index={index}
               name={el.name}
               cost={el.cost}
               value={el.value}
               purchasedItems={purchasedItems[el.id]} 
-              handleClick={()=>{
+              handleClick={(ev)=>{
+                let itemID=ev.target.id;
+                console.log(itemID)
                 if(numCookies<el.cost){
                   window.alert("You ain't got enough cookies! You gots to wait, Felicia!")
+                }
+                else if(itemID==="megaCursor"){
+                  setNumCookies(numCookies+el.value);
                 }
                 else{
                   setNumCookies(numCookies-el.cost);
