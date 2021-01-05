@@ -20,31 +20,40 @@ const calculateCookiesPerTick = (cookiesPerTick) => {
 };
 const Game = () => {
   const [cookieCount, setCookieCount] = useState(10000);
-  const [time, setTime] = useState(0);
-  const [cookieCost, setCookieCost] = useState(0);
-
   const [purchasedItems, setPurchasedItems] = useState({
     cursor: 0,
     grandma: 0,
     farm: 0,
   });
 
-  const handleClick = (cookieClick) => {
-    setTime(time + cookieClick);
-    console.log(cookieClick);
+  const handleClick = (item) => {
+    console.log(item);
+    if (cookieCount < item.cost) {
+      window.alert("No more cookies");
+    } else {
+      setPurchasedItems({
+        ...purchasedItems,
+        [item.id]: purchasedItems[item.id] + 1,
+      });
+      setCookieCount(cookieCount - item.cost);
+    }
   };
 
+  const calculateCookiesPerTick = () => {
+    const cursor = purchasedItems.cursor * items[0].value;
+    const grandma = purchasedItems.grandma * items[1].value;
+    const farm = purchasedItems.farm * items[2].value;
+
+    const totalValue = cursor + grandma + farm;
+    return totalValue;
+  };
   useInterval(() => {
-    const numOfGeneratedCookies = calculateCookiesPerTick(purchasedItems);
+    const numOfGeneratedCookies = calculateCookiesPerTick();
     setCookieCount(cookieCount + numOfGeneratedCookies);
   }, 1000);
 
   const useCookieCount = () => {
-    if (cookieCount > 0) {
-      setCookieCount(cookieCount + 1);
-    } else {
-      return alert("You are out of cookies!");
-    }
+    setCookieCount(cookieCount + 1);
   };
 
   useEffect(() => {
@@ -59,8 +68,7 @@ const Game = () => {
       <GameArea>
         <Indicator>
           <Total>{cookieCount} cookies</Total>
-     
-          <strong>{time}</strong> cookies per second
+          <strong>{calculateCookiesPerTick()}</strong> cookies per second
         </Indicator>
         <Button onClick={useCookieCount}>
           <Cookie src={cookieSrc} />
@@ -69,36 +77,11 @@ const Game = () => {
 
       <ItemArea>
         <SectionTitle>Items:</SectionTitle>
+
         <Item
-          id="cursor"
-          setPurchasedItems={setPurchasedItems}
-          purchasedItems={purchasedItems}
           items={items}
-          setCookieCount={setCookieCount}
-          cookieCount={cookieCount}
+          numOwned={purchasedItems}
           handleClick={handleClick}
-          cookieCost={cookieCost}
-          setCookieCost={setCookieCost}
-        />
-        <Item
-          id="grandma"
-          purchasedItems={purchasedItems}
-          items={items}
-          setCookieCount={setCookieCount}
-          cookieCount={cookieCount}
-          handleClick={handleClick}
-          cookieCost={cookieCost}
-          setCookieCost={setCookieCost}
-        />
-        <Item
-          id="farm"
-          purchasedItems={purchasedItems}
-          items={items}
-          setCookieCount={setCookieCount}
-          cookieCount={cookieCount}
-          handleClick={handleClick}
-          cookieCost={cookieCost}
-          setCookieCost={setCookieCost}
         />
       </ItemArea>
       <HomeLink to="/">Return home</HomeLink>

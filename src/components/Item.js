@@ -1,120 +1,66 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 
-const Item = ({
-  items,
-  cookieCount,
-  setCookieCount,
-  purchasedItems,
-  handleClick,
-  cookieCost,
-  setCookieCost,
-  setPurchasedItems,
- 
-  id,
-}) => {
-  const [numOwned, setNumOwned] = useState(0);
-  const [categorySelected, setCategorySelected] = useState([""]);
-  const [cost, setCost] = useState(0);
-  const [isClicked, setIsClicked] = useState(false);
-
-  const useUpdateCost = () => {
-    useEffect(() => {
-      if (isClicked) {
-        setNumOwned(numOwned + 1);
-        let newPurchased = (purchasedItems[id] += 1);
-        let updateValues = `${categorySelected}: ${newPurchased}`;
-        setCost(updateValues);
-      }
-      return () => setIsClicked(false);
-    }, [isClicked]);
-
-    useEffect(() => {
-      const updatedValue = items.find((item) => {
-        if (id == item.id && isClicked) {
-            let cost = item.cost
-          setCookieCost(cost);
-          handleClick(item.value);
-        }
-      });
-      return updatedValue;
-    }, [categorySelected, isClicked]);
-  };
-  useUpdateCost();
-
-  const handleChange = (event) => {
-
-    setIsClicked(true);
-    setCategorySelected(event.currentTarget.id);
-
-    if (cookieCount > 0) {
-      setCookieCount(cookieCount - event.currentTarget.value);
-    } else {
-      return alert("You are out of cookies!");
-    }
-  };
-  console.log(cookieCost);
-  const fullList = items.map((it) => {
-    if (it.id === id) {
-      return (
-        <Markup>
-          <List>
-            <ClickedItem
-              id={it.id}
-              key={it.id}
-              value={it.cost}
-              onClick={handleChange}
-            >
-              <Items key={it.id}>
-                <Div>
-                  <Title>{it.name}</Title>
-                  <Description>
-                    Cost: {it.cost} cookie(s). Produces {it.value}{" "}
-                    cookies/second.
-                  </Description>
-                </Div>
-                <Total key={it.id}>{numOwned}</Total>
+const Item = ({ items, numOwned, handleClick }) => {
+  return (
+    <Markup>
+      {items.map((item) => {
+        return (
+         
+          <ClickedItem
+            id={item.id}
+            key={item.id}
+            value={item.cost}
+            onClick={() => handleClick(item)}
+          >
+               
+            <Items key={item.id}>
+              <Title>{item.name}</Title>
+              <Description>
+                Cost: {item.cost} cookie(s). Produces {item.value}{" "}
+                cookies/second.
+              </Description>
               </Items>
-            </ClickedItem>
-          </List>
-        </Markup>
-      );
-    }
-  });
-  return fullList;
+       
+                <Total key={item.id}>{numOwned[item.id]}</Total>
+            
+         
+          </ClickedItem>
+
+        );
+      })}
+    </Markup>
+  );
 };
 
-const Markup = styled.div`
-  width: 400px;
-  display: flex;
-  height: 100px;
-`;
-const Div = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
-const List = styled.ul``;
-const Items = styled.li`
-  display: flex;
-  justify-content: flex-end;
-  border-bottom: 1px white solid;
-`;
-const Title = styled.h1``;
-const Description = styled.p`
-  display: flex;
-  flex-direction: column;
-`;
 const ClickedItem = styled.button`
   color: white;
-  background-color: #222;
-  width: 350px;
-  border: none;
-`;
-const Total = styled.h2`
-  margin-top: 30px;
   display: flex;
-  padding-left: 20px;
+  background-color: #222;
+  align-items: center;
+  border: none;
+  justify-content: space-between;
+  cursor: pointer;
+  height: 100px;
+`;
+
+const Markup = styled.div`
+  margin-top: 1rem;
+
+`;
+
+const Items = styled.div`
+padding:20px;
+`;
+const Title = styled.h1`
+padding:10px;
+`;
+const Description = styled.p``;
+
+const Total = styled.h2`
+
+margin-top:30px;
+
 `;
 
 export default Item;
