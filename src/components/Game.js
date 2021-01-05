@@ -9,16 +9,18 @@ import { useKeydown, useDocumentTitle } from '../../src/hooks/custom-hooks'
 
 import cookieSrc from "../cookie.svg";
 
-const items = [
-  { id: "cursor", name: "Cursor", cost: 10, value: 1 },
-  { id: "grandma", name: "Grandma", cost: 100, value: 10 },
-  { id: "farm", name: "Farm", cost: 1000, value: 80 },
-];
 const initialValues = { 
   cursor: 0,
   grandma: 0,
   farm: 0,
+  megaCursor: 0,
 };
+const items = [
+  { id: "cursor", name: "Cursor", cost: 10, value: 1 },
+  { id: "grandma", name: "Grandma", cost: 100, value: 10 },
+  { id: "farm", name: "Farm", cost: 1000, value: 80 },
+  { id:"megaCursor", name:"Mega Cursor", cost: 5000, value: 30},
+];
 
 const Game = () => {
   //numCookies STATE
@@ -27,7 +29,18 @@ const Game = () => {
   const [purchasedItems, setPurchasedItems] = useState(initialValues);
 
   const incrementCount = () => {
-    setNumCookies(numCookies + 1);
+    let megaClick = null;
+
+    items.forEach((item) => {
+      let itemId = item.id;
+      if(itemId === 'megaCursor'){
+        // console.log(itemId, 'MEGA CURSOR');
+        // console.log(purchasedItems[itemId], 'COUNT');
+        megaClick = purchasedItems[itemId]*item.value;
+      }
+    })
+    console.log(megaClick, 'megaClick')
+    setNumCookies(numCookies + 1 + megaClick);
   };
   useKeydown('Space', incrementCount);
 
@@ -50,10 +63,12 @@ const Game = () => {
     let totalCookiesPerSec = 0;
     items.forEach((item) => {
       let itemId = item.id
-      let cookiesPerSec = purchasedItems[itemId] * item.value;
-      // console.log(cookiesPerSec, 'PER SEC')
-
-      totalCookiesPerSec  += cookiesPerSec;
+      if(itemId!=='megaCursor'){
+        let cookiesPerSec = purchasedItems[itemId] * item.value;
+        // console.log(cookiesPerSec, 'PER SEC')
+        totalCookiesPerSec  += cookiesPerSec;
+      }
+      
     })
     return totalCookiesPerSec;
   }
@@ -118,6 +133,7 @@ const Game = () => {
         <SectionTitle>Items:</SectionTitle>
         {items.map((item) => {
           return <Item 
+          id={item.id}
           name={item.name}
           cost={item.cost}
           value={item.value} 

@@ -1,23 +1,24 @@
 import React, { useState, useEffect, useRef} from "react";
 import styled from "styled-components";
 
-const Item = ({ name, cost, value, numOwned, handleClick, itemIndex }) => {
+const Item = ({ id, name, cost, value, numOwned, handleClick, itemIndex }) => {
     const firstIndexRef = useRef(null);
-    // console.log(itemIndex, name);
+    // console.log(id);
 
     useEffect(() => {
         if(itemIndex === 0){
             firstIndexRef.current.focus();
         }
     }, [])
+    
     return (
-    <Button onClick={handleClick} ref={firstIndexRef}> 
+    <Button onClick={handleClick} ref={firstIndexRef}>
         <div>
-            <Name>{name}</Name>
-            <Description>Cost: {cost} cookie(s). Produces: {value} cookies/second.</Description>
+            <Name>{id!=="megaCursor" ? name: name}</Name>
+            {/* <Description>Cost: {cost} cookie(s). Produces: {value} cookies/second.</Description> */}
+            <Description>{id!=="megaCursor" ? `Cost: ${cost} cookie(s). Produces: ${value} cookies/second.`:`Cost: ${cost} cookie(s). Produce: ${value} cookies/click`}</Description>
         </div>
         <Number>{numOwned}</Number>
-        
     </Button>
     )
 };
@@ -31,6 +32,7 @@ const Button = styled.button`
     border-bottom: 1px solid gray;
     color: white;
     text-align: left;
+    width: 25vw;
     /* outline: none; //UNCOMMENT WHEN THE numOwned WORKS */
 `;
 const Name = styled.h2`
