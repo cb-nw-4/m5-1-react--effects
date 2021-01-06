@@ -27,6 +27,11 @@ const Game = () => {
   const [cookiesPerSecState, setCookiesPerSecState] = useState(0);
   const [numCookies, setNumCookies] = useState(10000);
   const [purchasedItems, setPurchasedItems] = useState(initialValues);
+  const [itemCost, setItemCost] = useState(items);
+
+  // itemCost.forEach((item, index) => {
+  //   console.log(item.cost, index);
+  // })
 
   const incrementCount = () => {
     let megaClick = null;
@@ -47,10 +52,21 @@ const Game = () => {
   //purchasedItems COUNT
   const handleClick = (item) => {
     let itemId = item.id
+    // console.log(item, 'ITEM')
 
     if(numCookies >= item.cost){
       setNumCookies(numCookies - item.cost);
-      setPurchasedItems({...purchasedItems, [itemId]:purchasedItems[itemId] + 1});
+      setPurchasedItems({ ...purchasedItems, [itemId]:purchasedItems[itemId] + 1 });
+
+      itemCost.forEach((itemC, index) => {
+        if(itemC.id===item.id){
+          // console.log(itemC.cost, 'COST');
+          // console.log(itemCost[index].cost, 'Index COst')
+          itemCost[index].cost = Math.floor(Math.pow(itemC.cost, 1.09));
+        }
+        
+      })
+
     } else {
       window.alert('Not enough cookies');
     }
