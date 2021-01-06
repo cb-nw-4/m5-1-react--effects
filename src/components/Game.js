@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { v4 as uuidv4 } from 'uuid';
+import useSound from 'use-sound';
 
 import Item from './Item';
 import useInterval from '../hooks/use-interval.hook';
@@ -10,6 +11,8 @@ import useDocumentTitle from '../hooks/useDocumentTitle';
 
 import cookieSrc from "../cookie.svg";
 import cookieMonster from '../monster32.png';
+import sndCrunch from '../crunch.mp3';
+import sndCookieMonster from '../cookie-monster.mp3';
 
 const items = [
   { id: "cursor", name: "Cursor", cost: 10, value: 1, type: 'tick' },
@@ -27,6 +30,8 @@ const Game = () => {
     farm: 0,
     megacursor: 0
   });
+  const [playCrunch] = useSound(sndCrunch);
+  const [playCookieMonster] = useSound(sndCookieMonster);
 
   // Prevent the default action of the spacebar registering a click event
   // on the cookie if it has focus.
@@ -34,6 +39,10 @@ const Game = () => {
   //   console.log(event.current.currentTarget);
   //   event.preventDefault();
   // }
+
+  useEffect(() => {
+    playCookieMonster();
+  }, [playCookieMonster]);
 
   const handleItemClick = (event) => {
     const index = items.findIndex(item => item.id === event.currentTarget.id);
@@ -56,9 +65,10 @@ const Game = () => {
 
     items[index].cost = newCost;
   }
-
+  
   const handleCookieClick = () => {
     setNumCookies(numCookies + cookiesPerClick);
+    playCrunch();
   }
 
   useInterval(() => {
