@@ -3,7 +3,8 @@ import styled from "styled-components";
 import useInterval from "../hooks/use-interval.hook";
 import { Link } from "react-router-dom";
 import Item from "./Item";
-
+import useKeyDown from "./useKeyDown";
+import useDocumentTitle from "./useDocumentTitle";
 import cookieSrc from "../cookie.svg";
 
 const items = [
@@ -13,14 +14,12 @@ const items = [
 ];
 
 const Game = () => {
- 
   const [cookieCount, setCookieCount] = useState(10000);
   const [purchasedItems, setPurchasedItems] = useState({
     cursor: 0,
     grandma: 0,
     farm: 0,
   });
-
 
   const handleClick = (item) => {
     console.log(item);
@@ -39,48 +38,37 @@ const Game = () => {
     const cursor = purchasedItems.cursor * items[0].value;
     const grandma = purchasedItems.grandma * items[1].value;
     const farm = purchasedItems.farm * items[2].value;
-
     const totalValue = cursor + grandma + farm;
     return totalValue;
   };
+  
   useInterval(() => {
     const numOfGeneratedCookies = calculateCookiesPerTick();
     setCookieCount(cookieCount + numOfGeneratedCookies);
   }, 1000);
 
-  const onKeyDown = (ev) => {
-    ev.preventDefault();
-    if (ev.code === "Space") {
-      handleCookieClick();
-    }
-  };
+  // const onKeyDown = (ev) => {
+  //   ev.preventDefault();
+  //   if (ev.code === "Space") {
+  //     handleCookieClick();
+  //   }
+  // };
   const handleCookieClick = () => {
     setCookieCount(cookieCount + 1);
   };
 
-  useEffect(() => {
-    document.title = `${cookieCount} cookies - Cookie Clicker Workshop`;
-    return () => {
-      document.title = `Cookie Clicker Workshop`;
-    };
-  }, [cookieCount]);
+useDocumentTitle(cookieCount,`Cookie Clicker Workshop` )
 
-  useEffect(() => {
-    window.addEventListener("keydown", onKeyDown);
-
-    return () => {
-      window.removeEventListener("keydown", onKeyDown);
-    };
-  }, [onKeyDown]);
+ useKeyDown("Space", handleCookieClick);
 
   return (
-    <Wrapper> 
+    <Wrapper>
       <GameArea>
         <Indicator>
           <Total>{cookieCount} cookies</Total>
           <strong>{calculateCookiesPerTick()}</strong> cookies per second
         </Indicator>
-        <Button  onClick={handleCookieClick}>
+        <Button onClick={handleCookieClick}>
           <Cookie src={cookieSrc} />
         </Button>
       </GameArea>
