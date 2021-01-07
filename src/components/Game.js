@@ -1,40 +1,163 @@
-import React from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import Item from './Item';
+import useInterval from '../../src/hooks/use-interval.hook';
+// import useInterval from 'src/hooks/use-interval.hook';
+// import { Helmet } from 'react-helmet';
+import { useKeydown, useDocumentTitle } from '../../src/hooks/custom-hooks'
 
 import cookieSrc from "../cookie.svg";
 
+const initialValues = { 
+  cursor: 0,
+  grandma: 0,
+  farm: 0,
+  megaCursor: 0,
+};
 const items = [
   { id: "cursor", name: "Cursor", cost: 10, value: 1 },
   { id: "grandma", name: "Grandma", cost: 100, value: 10 },
   { id: "farm", name: "Farm", cost: 1000, value: 80 },
+  { id:"megaCursor", name:"Mega Cursor", cost: 5000, value: 30},
 ];
 
 const Game = () => {
-  // TODO: Replace this with React state!
-  const numCookies = 100;
-  const purchasedItems = {
-    cursor: 0,
-    grandma: 0,
-    farm: 0,
+  //numCookies STATE
+  const [cookiesPerSecState, setCookiesPerSecState] = useState(0);
+  const [numCookies, setNumCookies] = useState(10000);
+  const [purchasedItems, setPurchasedItems] = useState(initialValues);
+  const [itemCost, setItemCost] = useState(items);
+
+  // itemCost.forEach((item, index) => {
+  //   console.log(item.cost, index);
+  // })
+
+  const incrementCount = () => {
+    let megaClick = null;
+
+    items.forEach((item) => {
+      let itemId = item.id;
+      if(itemId === 'megaCursor'){
+        // console.log(itemId, 'MEGA CURSOR');
+        // console.log(purchasedItems[itemId], 'COUNT');
+        megaClick = purchasedItems[itemId]*item.value;
+      }
+    })
+    console.log(megaClick, 'megaClick')
+    setNumCookies(numCookies + 1 + megaClick);
   };
+  useKeydown('Space', incrementCount);
+
+  //purchasedItems COUNT
+  const handleClick = (item) => {
+    let itemId = item.id
+    // console.log(item, 'ITEM')
+
+    if(numCookies >= item.cost){
+      setNumCookies(numCookies - item.cost);
+      setPurchasedItems({ ...purchasedItems, [itemId]:purchasedItems[itemId] + 1 });
+
+      itemCost.forEach((itemC, index) => {
+        if(itemC.id===item.id){
+          // console.log(itemC.cost, 'COST');
+          // console.log(itemCost[index].cost, 'Index COst')
+          itemCost[index].cost = Math.floor(Math.pow(itemC.cost, 1.09));
+        }
+        
+      })
+
+    } else {
+      window.alert('Not enough cookies');
+    }
+  };
+
+  //Passive Cookie Generation
+  const calculateCookiesPerTick = (purchasedItems) => {
+    // let entries = Object.entries(purchasedItems);
+    // console.log(entries);
+    let totalCookiesPerSec = 0;
+    items.forEach((item) => {
+      let itemId = item.id
+      if(itemId!=='megaCursor'){
+        let cookiesPerSec = purchasedItems[itemId] * item.value;
+        // console.log(cookiesPerSec, 'PER SEC')
+        totalCookiesPerSec  += cookiesPerSec;
+      }
+      
+    })
+    return totalCookiesPerSec;
+  }
+  useInterval(() => {
+    const numOfGeneratedCookies = calculateCookiesPerTick(purchasedItems);
+    // console.log(numOfGeneratedCookies);
+
+    setCookiesPerSecState(numOfGeneratedCookies);
+    setNumCookies(numCookies + numOfGeneratedCookies);
+  }, 1000);
+
+  //Exercise 4: Updateting the Tab Title
+  // useEffect(() => {
+  //   document.title = `${numCookies} cookies - Cookie Clicker`;
+  // }, [numCookies]);
+  useDocumentTitle({numCookies}, 'Cookie Clicker');
+
+  //Exercise 5: Using the "space" Key
+  // const keyPressHandler = (ev) => {
+  //   if (ev.code === "Space") {
+  //     incrementCount();
+  //     console.log('Key Pressed');
+  //   }
+  // }
+  // useEffect(() => {
+  //   console.log('Key press effect')
+  //   window.addEventListener('keydown', keyPressHandler);
+
+  //   return () => {
+  //     window.removeEventListener('keydown', keyPressHandler);
+  //   }
+  // }, [keyPressHandler]);
+
+
+  // CALLBACK EXAMPLE
+  // const handleGetCookie = 
+  //   useCallback(() => {
+  //     setNumCookies(numCookies + 1);
+  //   },[numCookies]);
+
+  // const onKeyDown =
+  //   useCallback((ev) => {
+  //     if (ev.code === "Space") {
+  //       handleClick()
+  //     }
+  //     window.addEventListener('keypress', onKeyDown);
+  //   }, [handleGetCookie]);
 
   return (
     <Wrapper>
       <GameArea>
-        <Indicator>
+        <Indicator numCookies={numCookies}>
           <Total>{numCookies} cookies</Total>
-          {/* TODO: Calcuate the cookies per second and show it here: */}
-          <strong>0</strong> cookies per second
+          <strong>{cookiesPerSecState}</strong> cookies per second
         </Indicator>
         <Button>
-          <Cookie src={cookieSrc} />
+          <Cookie src={cookieSrc} onClick={incrementCount}/>
         </Button>
       </GameArea>
 
       <ItemArea>
         <SectionTitle>Items:</SectionTitle>
-        {/* TODO: Add <Item> instances here, 1 for each item type. */}
+        {items.map((item) => {
+          return <Item 
+          id={item.id}
+          name={item.name}
+          cost={item.cost}
+          value={item.value} 
+          numOwned={purchasedItems[item.id]} 
+          handleClick={() => {handleClick(item)}}
+          itemIndex={items.indexOf(item)}
+          />
+        })}
       </ItemArea>
       <HomeLink to="/">Return home</HomeLink>
     </Wrapper>
