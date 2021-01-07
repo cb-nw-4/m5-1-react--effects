@@ -7,6 +7,7 @@ Unfortunately, using `setInterval` with hooks is somewhat complicated. To solve 
 ```js
 useInterval(() => {
   const numOfGeneratedCookies = calculateCookiesPerTick(purchasedItems);
+  
 
   // Add this number of cookies to the total
 }, 1000);
