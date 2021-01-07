@@ -1,20 +1,27 @@
 import React, { useState, useEffect } from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import useInterval from "../hooks/use-interval.hook";
 import { Link } from "react-router-dom";
 import Item from "./Item";
 import useKeyDown from "./useKeyDown";
 import useDocumentTitle from "./useDocumentTitle";
 import cookieSrc from "../cookie.svg";
+import cursorSource from "../cursor.png";
+import Cursor from "./Cursor";
 
 const items = [
   { id: "cursor", name: "Cursor", cost: 10, value: 1 },
   { id: "grandma", name: "Grandma", cost: 100, value: 10 },
   { id: "farm", name: "Farm", cost: 1000, value: 80 },
+  // { id: "megaCursor", name: "Mega Cursor", cost: 500, value: 5}
 ];
 
 const Game = () => {
-  const [cookieCount, setCookieCount] = useState(10000);
+  const urlCursor =  `url("https://findicons.com/files/icons/2776/android_icons/96/ic_cursor_off.png"),auto`
+  const [cookieCount, setCookieCount] = useState(1000);
+  const [megaClick, setMegaClick] = useState(false);
+  const [toggle, setToggle] = useState(false);
+  // const [updatedCursor, useUpdatedCursor] = useState();
   const [purchasedItems, setPurchasedItems] = useState({
     cursor: 0,
     grandma: 0,
@@ -24,7 +31,7 @@ const Game = () => {
   const handleClick = (item) => {
     console.log(item);
     if (cookieCount < item.cost) {
-      window.alert("No more cookies");
+      window.alert("You are out of cookies!");
     } else {
       setPurchasedItems({
         ...purchasedItems,
@@ -41,34 +48,56 @@ const Game = () => {
     const totalValue = cursor + grandma + farm;
     return totalValue;
   };
-  
+
   useInterval(() => {
     const numOfGeneratedCookies = calculateCookiesPerTick();
     setCookieCount(cookieCount + numOfGeneratedCookies);
   }, 1000);
 
-  // const onKeyDown = (ev) => {
-  //   ev.preventDefault();
-  //   if (ev.code === "Space") {
-  //     handleCookieClick();
-  //   }
-  // };
-  const handleCookieClick = () => {
-    setCookieCount(cookieCount + 1);
+  const useMegaClick = () => {
+    setMegaClick(true);
+   
+    if (cookieCount >= 500) {
+      setCookieCount(cookieCount - 500);
+    } else {
+      window.alert("Not Enough Cookies To Purchase!");
+    }
+   
+ 
+      document.getElementById("Wrapper").style.cursor = `${urlCursor}`; 
+      document.getElementById("CookieButton").style.cursor = `${urlCursor}`;
+    
+    
   };
 
-useDocumentTitle(cookieCount,`Cookie Clicker Workshop` )
+  const handleCookieClick = () => {
+    if (megaClick == true) {
+      setCookieCount(cookieCount + 5);
+    } else {
+      setCookieCount(cookieCount + 1);
+    }
+  };
 
- useKeyDown("Space", handleCookieClick);
 
+  useDocumentTitle(cookieCount, `Cookie Clicker Workshop`);
+
+  useKeyDown("Space", handleCookieClick);
+  
   return (
-    <Wrapper>
+    <Wrapper id="Wrapper" >
+      <div>
+        <Cursor
+          megaClick={megaClick}
+          useMegaClick={useMegaClick}
+        />
+        
+      </div>
       <GameArea>
         <Indicator>
           <Total>{cookieCount} cookies</Total>
           <strong>{calculateCookiesPerTick()}</strong> cookies per second
         </Indicator>
-        <Button onClick={handleCookieClick}>
+        <Button id="CookieButton" onClick={handleCookieClick}>
           <Cookie src={cookieSrc} />
         </Button>
       </GameArea>
@@ -90,7 +119,9 @@ useDocumentTitle(cookieCount,`Cookie Clicker Workshop` )
 const Wrapper = styled.div`
   display: flex;
   height: 100vh;
+
 `;
+
 const GameArea = styled.div`
   flex: 1;
   display: grid;
