@@ -11,24 +11,24 @@ import useInterval from "../hooks/use-interval.hook"
 import cookieSrc from "../cookie.svg";
 
 const items = [
-  { id: "cursor", name: "Cursor", cost: 10, value: 1 },
-  { id: "grandma", name: "Grandma", cost: 100, value: 10 },
-  { id: "farm", name: "Farm", cost: 1000, value: 80 },
+  { id: "cursor", name: "Cursor", cost: 10, value: 1, clickType: "tick"},
+  { id: "grandma", name: "Grandma", cost: 100, value: 10, clickType: "tick"},
+  { id: "farm", name: "Farm", cost: 1000, value: 80 , clickType: "tick"},
+  { id: "megaCursor", name: "MegaCursor", cost: 0, value: 1, clickType: "click" },
 ];
 
 const Game = () => {
 
-  
   // TODO: Replace this with React state!
   const [numCookies, setNumCookies] = useState(100);
   const initialState = {
     cursor: 0,
     grandma: 0,
     farm: 0,
+    megaCursor: 0
   };
   
   const [purchasedItems, setPurchasedItems] = useState(initialState);
-  let focusOnMount = false;
 
   const handleCookiesClick = () =>{
     setNumCookies((numCookies) => numCookies + 1)
@@ -39,14 +39,24 @@ const Game = () => {
   useKeydown('Space', handleCookiesClick);
 
 
-  
   const handleClick = (item) =>{
 
-    if(numCookies-item.cost > 0){
+    if(numCookies-item.cost > 0 && item.clickType === "tick" ){
+      console.log(item)
       setNumCookies(numCookies - item.cost);
+      
+      //Increase the price for the cookies 
+      item.cost += Math.floor(Math.random() * purchasedItems[item.id]);
+
       setPurchasedItems({...purchasedItems, [item.id]: purchasedItems[item.id]+1})
     }    
     //console.log({...purchasedItems, [item.id]: +1})
+
+    if(item.clickType === "click" ){
+      console.log(item)
+      setNumCookies((numCookies) => numCookies + 1)
+      
+    }  
   }
   
   const calculateCookiesPerTick =(ObjItems) =>{
@@ -60,9 +70,6 @@ const Game = () => {
 
 
   useDocumentTitle(numCookies, `Cookie Clicker Workshop` );
-
-
-
 
   useInterval(() => {
     const numOfGeneratedCookies = calculateCookiesPerTick(purchasedItems);
@@ -88,14 +95,15 @@ const Game = () => {
       <ItemArea>
         <SectionTitle>Items:</SectionTitle>
         {items.map(item => (
-          <Item key={item.id} 
-                name={item.name} 
-                cost={item.cost} 
-                value={item.value}
-                numOwned ={purchasedItems[item.id]}
-                focusOnMount={focusOnMount = (item.id ==='cursor') }
-                handleClick = {()=> handleClick(item)}
-          />
+            <Item key={item.id} 
+                  name={item.name} 
+                  cost={item.cost} 
+                  value={item.value}
+                  numOwned ={purchasedItems[item.id]}
+                  focusOnMount={(item.id ==='cursor') }
+                  handleClick = {()=> handleClick(item)}
+            />
+
         ))}
       
       </ItemArea>
