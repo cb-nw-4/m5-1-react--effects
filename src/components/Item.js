@@ -29,18 +29,19 @@ const Section = styled.button`
     text-align: left;
     border-top: none;
     border-left: none;
+    border-right: none;
     border-bottom: 1px lightgray solid;
     margin-top: 15px; 
     background: none;
- 
+
     & p {
         color: lightgray;
-    }
+    };
 
     &:focus {
         outline: 3px solid;
         outline-color: #5E9ED6; 
-    }
+    };
 `;
 
 const Name = styled.div`

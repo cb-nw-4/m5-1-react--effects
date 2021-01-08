@@ -1,10 +1,12 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
 import cookieSrc from "../cookie.svg";
 import Item from "./Item";
-import useInterval from "../hooks/use-interval.hook"
+import useInterval from "../hooks/use-interval.hook";
+import useKeyDown from "../hooks/use-keyDown.hook";
+import useDocumentTitle from "../hooks/use-documentTitle.hook";
 
 const items = [
   { id: "cursor", name: "Cursor", cost: 10, value: 1 },
@@ -57,31 +59,17 @@ const Game = () => {
     setNumCookies(numCookies + numOfGeneratedCookies)
   }, 1000);
 
-  useEffect(()=> {
-    if(numCookies > 0) {
-      window.document.title = `${numCookies} cookies - Cookie Clicker Workshop`;
-    }
-    return() => {
-      window.document.title = `Cookie Clicker Workshop`;
-    }
-  }, [numCookies]);
-
   // handleCookieClick should only run if the spacebar event is for cookie button
   const cookieRef = useRef();
 
-  const handleKeyDown = (ev) => {
-    //console.log("eventListener added")
-    if (ev.code === "Space" && cookieRef.current.focus()) {
-      handleCookieClick();
-    }
-  };
- 
-  useEffect(() => {
-    window.addEventListener("keydown", handleKeyDown);
-    return() => {
-        window.removeEventListener("keydown", handleKeyDown)
-      }
-  }, [handleKeyDown]);
+  // Custom hook for keydown
+  let keyCode = "Space";
+  useKeyDown(keyCode, handleCookieClick, cookieRef);
+
+  // Custom hook for title
+  let title = `${numCookies} cookies - Cookie Clicker Workshop`;
+  let fallBackTitle = `Cookie Clicker Workshop`;
+  useDocumentTitle(title, fallBackTitle, numCookies);
 
   return (
     <Wrapper>
