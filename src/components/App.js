@@ -6,6 +6,7 @@ import Home from "./Home";
 import Game from "./Game";
 
 function App(props) {
+
   return (
     <>
       <GlobalStyles />
