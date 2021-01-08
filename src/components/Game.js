@@ -23,7 +23,7 @@ const Game = () => {
   };
   const [purchasedItems, setPurchasedItems] = useState(initialPurchasedItems);
 
-  const handleClick = (ev,cost,id)=>{
+  const handleClick = (cost,id)=>{
     if(numCookies<cost){
       window.alert('Not enough cookies');
     }else{
@@ -85,12 +85,11 @@ const Game = () => {
         items.map((item)=>{
           return <Item 
           key = {item.id}
-          id = {item.id}
           name={item.name} 
           cost={item.cost} 
           value={item.value}
           numOwned = {purchasedItems[item.id]}
-          handleClick = {handleClick}
+          handleClick = {()=>handleClick(item.cost, item.id)}
           />
         })
         }
