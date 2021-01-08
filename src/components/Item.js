@@ -4,7 +4,7 @@ import styled from "styled-components";
 const Item = ({ item, purchasedItems, handleClick }) => {
 
     return (
-        <Section onClick={() => handleClick()}>
+        <Section onClick={() => handleClick(item)}>
             <Name>
                 <h2>{item.name}</h2>
                 <p>Cost: {item.cost} cookie(s). Produces: {item.value} cookie(s)/second.</p>
