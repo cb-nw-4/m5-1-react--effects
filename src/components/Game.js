@@ -66,6 +66,20 @@ const Game = () => {
     }
   }, [numCookies]);
 
+  const handleKeyDown = (ev) => {
+    //console.log("eventListener added")
+    if (ev.code === "Space") {
+      handleCookieClick();
+    }
+  };
+ 
+  useEffect(() => {
+    window.addEventListener("keydown", handleKeyDown);
+    return() => {
+        window.removeEventListener("keydown", handleKeyDown)
+      }
+  }, [handleKeyDown]);
+
   return (
     <Wrapper>
       <GameArea>
