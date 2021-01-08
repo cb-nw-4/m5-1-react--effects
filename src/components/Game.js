@@ -12,6 +12,7 @@ const items = [
   { id: "cursor", name: "Cursor", cost: 10, value: 1 },
   { id: "grandma", name: "Grandma", cost: 100, value: 10 },
   { id: "farm", name: "Farm", cost: 1000, value: 80 },
+  { id: "megaCursor", name: "Mega Cursor", cost: 5000, value: 50 }
 ];
 
 const Game = () => {
@@ -21,11 +22,16 @@ const Game = () => {
     cursor: 0,
     grandma: 0,
     farm: 0,
+    megaCursor: 0
   });
-
+  
   // Handle cookie clicked
   const handleCookieClick = () => {
-    setNumCookies(numCookies + 1);
+    if(purchasedItems.megaCursor > 0) {
+      setNumCookies(numCookies + (purchasedItems.megaCursor * 50));
+    } else {
+      setNumCookies(numCookies + 1);
+    }
   };
 
   // Handle store item clicked
@@ -84,7 +90,7 @@ const Game = () => {
       </GameArea>
       <ItemArea>
         <SectionTitle>Items:</SectionTitle>
-        {items.map((item) => <Item items={items} key={item.id} item={item} purchasedItems={purchasedItems} handleClick={handleClick}/>)}
+        {items.map((item) => <Item items={items} key={item.id} item={item} purchasedItems={purchasedItems} handleClick={handleClick} />)}
       </ItemArea>
       <HomeLink to="/">Return home</HomeLink>
     </Wrapper>

@@ -1,2 +1,4 @@
 [0105/100057.172:ERROR:directory_reader_win.cc(43)] FindFirstFile: The system cannot find the path specified. (0x3)
 [0107/094810.293:ERROR:directory_reader_win.cc(43)] FindFirstFile: The system cannot find the path specified. (0x3)
+[0107/213706.607:ERROR:process_reader_win.cc(151)] SuspendThread: Access is denied. (0x5)
+[0107/213706.609:ERROR:exception_snapshot_win.cc(99)] thread ID 3316 not found in process

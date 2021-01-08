@@ -13,7 +13,10 @@ const Item = ({ items, item, purchasedItems, handleClick }) => {
         <Section ref={itemRef} onClick={() => handleClick(item)}>
             <Name>
                 <h2>{item.name}</h2>
+                {item.id === "megaCursor" ? 
+                <p>Cost: {item.cost} cookie(s). Produces: {item.value} cookies/click.</p> :
                 <p>Cost: {item.cost} cookie(s). Produces: {item.value} cookie(s)/second.</p>
+                }
             </Name>
             <div>
                 <h1>{purchasedItems[item.id]}</h1>
