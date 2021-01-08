@@ -1,40 +1,115 @@
-import React from "react";
-import styled from "styled-components";
+import React, { useState, useEffect } from "react";
+import styled, { css } from "styled-components";
+import useInterval from "../hooks/use-interval.hook";
 import { Link } from "react-router-dom";
-
+import Item from "./Item";
+import useKeyDown from "./useKeyDown";
+import useDocumentTitle from "./useDocumentTitle";
 import cookieSrc from "../cookie.svg";
+import cursorSource from "../cursor.png";
+import Cursor from "./Cursor";
 
 const items = [
   { id: "cursor", name: "Cursor", cost: 10, value: 1 },
   { id: "grandma", name: "Grandma", cost: 100, value: 10 },
   { id: "farm", name: "Farm", cost: 1000, value: 80 },
+  // { id: "megaCursor", name: "Mega Cursor", cost: 500, value: 5}
 ];
 
 const Game = () => {
-  // TODO: Replace this with React state!
-  const numCookies = 100;
-  const purchasedItems = {
+  const urlCursor =  `url("https://findicons.com/files/icons/2776/android_icons/96/ic_cursor_off.png"),auto`
+  const [cookieCount, setCookieCount] = useState(1000);
+  const [megaClick, setMegaClick] = useState(false);
+  const [toggle, setToggle] = useState(false);
+  // const [updatedCursor, useUpdatedCursor] = useState();
+  const [purchasedItems, setPurchasedItems] = useState({
     cursor: 0,
     grandma: 0,
     farm: 0,
+  });
+
+  const handleClick = (item) => {
+    console.log(item);
+    if (cookieCount < item.cost) {
+      window.alert("You are out of cookies!");
+    } else {
+      setPurchasedItems({
+        ...purchasedItems,
+        [item.id]: purchasedItems[item.id] + 1,
+      });
+      setCookieCount(cookieCount - item.cost);
+    }
   };
 
+  const calculateCookiesPerTick = () => {
+    const cursor = purchasedItems.cursor * items[0].value;
+    const grandma = purchasedItems.grandma * items[1].value;
+    const farm = purchasedItems.farm * items[2].value;
+    const totalValue = cursor + grandma + farm;
+    return totalValue;
+  };
+
+  useInterval(() => {
+    const numOfGeneratedCookies = calculateCookiesPerTick();
+    setCookieCount(cookieCount + numOfGeneratedCookies);
+  }, 1000);
+
+  const useMegaClick = () => {
+    setMegaClick(true);
+   
+    if (cookieCount >= 500) {
+      setCookieCount(cookieCount - 500);
+    } else {
+      window.alert("Not Enough Cookies To Purchase!");
+    }
+   
+ 
+      document.getElementById("Wrapper").style.cursor = `${urlCursor}`; 
+      document.getElementById("CookieButton").style.cursor = `${urlCursor}`;
+    
+    
+  };
+
+  const handleCookieClick = () => {
+    if (megaClick == true) {
+      setCookieCount(cookieCount + 5);
+    } else {
+      setCookieCount(cookieCount + 1);
+    }
+  };
+
+
+  useDocumentTitle(cookieCount, `Cookie Clicker Workshop`);
+
+  useKeyDown("Space", handleCookieClick);
+  
   return (
-    <Wrapper>
+    <Wrapper id="Wrapper" >
+      <div>
+        <Cursor
+          megaClick={megaClick}
+          useMegaClick={useMegaClick}
+        />
+        
+      </div>
       <GameArea>
         <Indicator>
-          <Total>{numCookies} cookies</Total>
-          {/* TODO: Calcuate the cookies per second and show it here: */}
-          <strong>0</strong> cookies per second
+          <Total>{cookieCount} cookies</Total>
+          <strong>{calculateCookiesPerTick()}</strong> cookies per second
         </Indicator>
-        <Button>
+        <Button id="CookieButton" onClick={handleCookieClick}>
           <Cookie src={cookieSrc} />
         </Button>
       </GameArea>
 
       <ItemArea>
         <SectionTitle>Items:</SectionTitle>
-        {/* TODO: Add <Item> instances here, 1 for each item type. */}
+
+        <Item
+          items={items}
+          numOwned={purchasedItems}
+          handleClick={handleClick}
+        />
       </ItemArea>
       <HomeLink to="/">Return home</HomeLink>
     </Wrapper>
@@ -44,7 +119,9 @@ const Game = () => {
 const Wrapper = styled.div`
   display: flex;
   height: 100vh;
+
 `;
+
 const GameArea = styled.div`
   flex: 1;
   display: grid;
