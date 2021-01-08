@@ -1,9 +1,9 @@
 import React from "react";
 import styled from "styled-components";
 
-const Item = ({name, cost, value, numOwned, handleClick }) =>{
+const Item = ({id, name, cost, value, numOwned, handleClick }) =>{
     return (
-    <ItemLine onClick={handleClick}>
+    <ItemLine onClick={(ev)=>handleClick(ev,cost,id)}>
         <div>
         <Name>{name}</Name>
         <p>Cost: {cost} cookie(s). Produces {value} cookies/second.</p>
