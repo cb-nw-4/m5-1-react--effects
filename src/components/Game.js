@@ -31,7 +31,7 @@ const Game = () => {
   const [purchasedItems, setPurchasedItems] = useState(initialState);
 
   const handleCookiesClick = () =>{
-    setNumCookies((numCookies) => numCookies + 1)
+    setNumCookies((numCookies) => numCookies + purchasedItems['megaCursor']+ 1)
     //console.log(numCookies, 'space cookie')
   }
 
@@ -42,29 +42,36 @@ const Game = () => {
   const handleClick = (item) =>{
 
     if(numCookies-item.cost > 0 && item.clickType === "tick" ){
-      console.log(item)
+      //console.log(item)
       setNumCookies(numCookies - item.cost);
       
       //Increase the price for the cookies 
-      item.cost += Math.floor(Math.random() * purchasedItems[item.id]);
+      item.cost += Math.ceil(Math.random() * purchasedItems[item.id]);
 
       setPurchasedItems({...purchasedItems, [item.id]: purchasedItems[item.id]+1})
     }    
     //console.log({...purchasedItems, [item.id]: +1})
 
     if(item.clickType === "click" ){
-      console.log(item)
-      setNumCookies((numCookies) => numCookies + 1)
+      //console.log(item)
+      setPurchasedItems({...purchasedItems, [item.id]: purchasedItems[item.id]+1})
       
     }  
   }
   
   const calculateCookiesPerTick =(ObjItems) =>{
     let total = 0;
+
+    //if(item.clickType === "tick" ){
     
     items.map(item => 
-      total += ObjItems[item.id] * item.value)
-      
+      { if(item.id !== 'megaCursor'){
+        total += ObjItems[item.id] * item.value
+
+      }
+
+      })
+     
       return total;   
   }
 
@@ -87,7 +94,7 @@ const Game = () => {
             <strong>{calculateCookiesPerTick(purchasedItems)}</strong> cookies per second
         </Indicator>
         <Button onClick={handleCookiesClick}>
-          <Cookie src={cookieSrc} />
+          <Cookie src={cookieSrc}  />
         </Button>
 
       </GameArea>
