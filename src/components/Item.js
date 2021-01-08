@@ -1,11 +1,9 @@
 import React from "react";
 import styled from "styled-components";
 
-import GlobalStyles from "./GlobalStyles";
-
 const Item = ({name, cost, value, numOwned, handleClick }) =>{
     return (
-    <ItemLine handleClick={handleClick}>
+    <ItemLine onClick={handleClick}>
         <div>
         <Name>{name}</Name>
         <p>Cost: {cost} cookie(s). Produces {value} cookies/second.</p>
