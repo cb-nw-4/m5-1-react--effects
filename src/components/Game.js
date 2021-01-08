@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
@@ -66,9 +66,12 @@ const Game = () => {
     }
   }, [numCookies]);
 
+  // handleCookieClick should only run if the spacebar event is for cookie button
+  const cookieRef = useRef();
+
   const handleKeyDown = (ev) => {
     //console.log("eventListener added")
-    if (ev.code === "Space") {
+    if (ev.code === "Space" && cookieRef.current.focus()) {
       handleCookieClick();
     }
   };
@@ -87,13 +90,13 @@ const Game = () => {
           <Total>{numCookies} cookies</Total>
           <strong>{CookiesPerSec}</strong> cookies per second
         </Indicator>
-        <Button onClick={() => handleCookieClick()}>
+        <Button ref={cookieRef} onClick={() => handleCookieClick()}>
           <Cookie src={cookieSrc} />
         </Button>
       </GameArea>
       <ItemArea>
         <SectionTitle>Items:</SectionTitle>
-        {items.map((item) => <Item key={item.id} item={item} purchasedItems={purchasedItems} handleClick={handleClick}/>)}
+        {items.map((item) => <Item items={items} key={item.id} item={item} purchasedItems={purchasedItems} handleClick={handleClick}/>)}
       </ItemArea>
       <HomeLink to="/">Return home</HomeLink>
     </Wrapper>
@@ -113,6 +116,11 @@ const Button = styled.button`
   border: none;
   background: transparent;
   cursor: pointer;
+  
+  &:focus {
+        outline: 2px solid;
+        outline-color: #5E9ED6; 
+    }
 `;
 
 const Cookie = styled.img`

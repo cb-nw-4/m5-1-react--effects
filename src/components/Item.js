@@ -1,10 +1,16 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import styled from "styled-components";
 
-const Item = ({ item, purchasedItems, handleClick }) => {
+const Item = ({ items, item, purchasedItems, handleClick }) => {
+    const itemRef = useRef();
+    useEffect(() => {
+        if(items.indexOf(item) === 0 ) {
+            itemRef.current.focus()
+        }
+    }, []);
 
     return (
-        <Section onClick={() => handleClick(item)}>
+        <Section ref={itemRef} onClick={() => handleClick(item)}>
             <Name>
                 <h2>{item.name}</h2>
                 <p>Cost: {item.cost} cookie(s). Produces: {item.value} cookie(s)/second.</p>
@@ -29,6 +35,11 @@ const Section = styled.button`
  
     & p {
         color: lightgray;
+    }
+
+    &:focus {
+        outline: 3px solid;
+        outline-color: #5E9ED6; 
     }
 `;
 
