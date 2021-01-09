@@ -42,6 +42,8 @@ const Game = () => {
         ...purchasedItems,
         [item.id]: purchasedItems[item.id] + 1
       })
+      // Increase cost randomly after purchase
+      item.cost = item.cost + (Math.floor(Math.random() * 15) + 1);
     } else {
       window.alert("You don't have enough cookies to purchase this item :(")
     }
