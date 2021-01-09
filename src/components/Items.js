@@ -52,7 +52,6 @@ const Items=styled.button`
     background: transparent;
     cursor: pointer;
     text-align:left;
-    outline:none;
     &:active{
         transform:scale(0.95);
     }
