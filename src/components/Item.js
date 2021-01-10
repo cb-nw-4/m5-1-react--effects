@@ -1,11 +1,18 @@
 import React from "react";
 import styled from "styled-components";
 
-import GlobalStyles from "./GlobalStyles";
 
-const Item = ({name, cost, value, numOwned, handleClick }) =>{
+const Item = ({name, cost, value, numOwned, handleClick, itemNum }) =>{
+    const firstButton = React.useRef(null);
+    React.useEffect(() => {
+        if (itemNum===0) {
+          // stuff
+          firstButton.current.focus();
+        }
+      },[]);
+
     return (
-    <ItemLine onClick={handleClick}>
+    <ItemLine onClick={handleClick} ref={firstButton}>
         <div>
         <Name>{name}</Name>
         <p>Cost: {cost} cookie(s). Produces {value} cookies/second.</p>

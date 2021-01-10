@@ -58,7 +58,7 @@ const Game = () => {
 
   });
 
-
+  let itemNum = 0;
 
   return (
     <Wrapper>
@@ -90,6 +90,7 @@ const Game = () => {
           value={item.value}
           numOwned = {purchasedItems[item.id]}
           handleClick = {()=>handleClick(item.cost, item.id)}
+          itemNum = {itemNum++}
           />
         })
         }
