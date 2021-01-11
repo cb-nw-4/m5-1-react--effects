@@ -12,8 +12,9 @@ const items = [
   { id: "cursor", name: "Cursor", cost: 10, value: 1 },
   { id: "grandma", name: "Grandma", cost: 100, value: 10 },
   { id: "farm", name: "Farm", cost: 1000, value: 80 },
+  { id: "megacursor", name: "Mega Cursor", cost: 10, value: 2 },
+  
 ];
-
 
 const Game = () => {
   // TODO: Replace this with React state!
@@ -23,6 +24,7 @@ const Game = () => {
     cursor: 0,
     grandma: 0,
     farm: 0,
+    megacursor:0
   };
   const [purchasedItems, setPurchasedItems] = useState(initialPurchasedItems);
 
@@ -41,15 +43,6 @@ const Game = () => {
 
   };
 
-  /*
-  useEffect(()=>{
-    document.title = `${numCookies} cookies - Cookie Clicker Workshop`;
-    return () => {
-      document.title = `Cookie Clicker Workshop`
-    }
-  },[numCookies]);
-  */
-
   let title = `${numCookies} cookies - Cookie Clicker Workshop`;
   let fallBackTitle = `Cookie Clicker Workshop`;
   useDocumentTitle(title,fallBackTitle);
@@ -57,12 +50,19 @@ const Game = () => {
   const incrementCookies = () =>{
     setNumCookies(numCookies+1);
   };
-
+ 
   useKeyDown(32,incrementCookies);
 
-  
-
   let itemNum = 0;
+
+  const handleCookieClick = ()=>{
+    if(purchasedItems.megacursor ===0){
+      setNumCookies(numCookies+1);
+    }
+    else{
+      setNumCookies(numCookies+purchasedItems.megacursor*2);
+    }
+  };
 
   return (
     <Wrapper>
@@ -79,7 +79,7 @@ const Game = () => {
           <strong>{calculateCookiesPerTick(purchasedItems)}</strong> cookies per second
         </Indicator>
         <Button>
-          <Cookie src={cookieSrc} onClick={()=>setNumCookies(numCookies+1)}/>
+          <Cookie src={cookieSrc} onClick={handleCookieClick}/>
         </Button>
       </GameArea>
 

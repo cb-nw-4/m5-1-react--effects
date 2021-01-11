@@ -6,7 +6,6 @@ const Item = ({name, cost, value, numOwned, handleClick, itemNum }) =>{
     const firstButton = React.useRef(null);
     React.useEffect(() => {
         if (itemNum===0) {
-          // stuff
           firstButton.current.focus();
         }
       },[]);
@@ -15,7 +14,7 @@ const Item = ({name, cost, value, numOwned, handleClick, itemNum }) =>{
     <ItemLine onClick={handleClick} ref={firstButton}>
         <div>
         <Name>{name}</Name>
-        <p>Cost: {cost} cookie(s). Produces {value} cookies/second.</p>
+        <p>Cost: {cost} cookie(s). Produces {value} {name==="Mega Cursor"? "cookies/click":"cookies/second"}.</p>
         </div>
         <Number>{numOwned}</Number>
     </ItemLine>
