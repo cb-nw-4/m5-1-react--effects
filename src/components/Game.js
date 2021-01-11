@@ -1,16 +1,19 @@
-import React, {useState, useEffect} from "react";
+import React, {useState} from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
 import cookieSrc from "../cookie.svg";
 import Item from "./Item";
 import useInterval from "../hooks/use-interval.hook";
+import useKeyDown from "../hooks/useKeyDown";
+import useDocumentTitle from "../hooks/useDocumentTitle";
 
 const items = [
   { id: "cursor", name: "Cursor", cost: 10, value: 1 },
   { id: "grandma", name: "Grandma", cost: 100, value: 10 },
   { id: "farm", name: "Farm", cost: 1000, value: 80 },
 ];
+
 
 const Game = () => {
   // TODO: Replace this with React state!
@@ -38,25 +41,26 @@ const Game = () => {
 
   };
 
+  /*
   useEffect(()=>{
     document.title = `${numCookies} cookies - Cookie Clicker Workshop`;
     return () => {
       document.title = `Cookie Clicker Workshop`
     }
   },[numCookies]);
+  */
 
-  useEffect(()=>{
+  let title = `${numCookies} cookies - Cookie Clicker Workshop`;
+  let fallBackTitle = `Cookie Clicker Workshop`;
+  useDocumentTitle(title,fallBackTitle);
 
-    function handleKeydown(ev) {
-      if (ev.code === "Space") {
-        // Trigger here 
-        setNumCookies(numCookies+1)
-      }
-    }
-    window.addEventListener("keydown", handleKeydown);
-    return (()=>{window.removeEventListener("keydown", handleKeydown)});
+  const incrementCookies = () =>{
+    setNumCookies(numCookies+1);
+  };
 
-  });
+  useKeyDown(32,incrementCookies);
+
+  
 
   let itemNum = 0;
 
